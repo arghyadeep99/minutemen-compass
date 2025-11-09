@@ -8,13 +8,11 @@ A chat-based AI assistant that answers campus-specific questions for UMass Amher
 
 ## 💻 Demo
 
-https://user-images.githubusercontent.com/arghyadeep99/minutemen-compass/assets/screen-capture.webm
 
 <details>
 <summary>Watch Demo Video</summary>
 
-https://github.com/arghyadeep99/minutemen-compass/assets/screen-capture.webm
-
+https://github.com/arghyadeep99/minutemen-compass/blob/main/media/screen-capture.webm
 </details>
 
 ## ✨ Features
