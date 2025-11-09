@@ -1,10 +1,10 @@
-# UMass Campus Agent
+# Minutemen Compass
 
 A chat-based AI assistant that answers campus-specific questions for UMass Amherst students, staff, and faculty, and can take actions via tools (like finding buses, study spaces, resources) instead of just giving generic answers.
 
 ## 🎯 Project Overview
 
-**UMass Campus Agent** is like ChatGPT, but actually understands UMass life and does real tasks. Built for HackUMass with a focus on Ethical AI and using the Gemini API.
+**Minutemen Compass** is like ChatGPT, but actually understands UMass life and does real tasks. Built for HackUMass with a focus on Ethical AI and using the Gemini API.
 
 ## ✨ Features
 

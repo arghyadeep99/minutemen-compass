@@ -17,7 +17,7 @@ from bs4 import BeautifulSoup
 
 
 DEFAULT_BASE_URL = "https://umassdining.com/locations-menus"
-USER_AGENT = "UMassCampusAgent/1.0 (+https://example.edu) Python-httpx"
+USER_AGENT = "MinutemenCompass/1.0 (+https://example.edu) Python-httpx"
 
 
 @dataclass

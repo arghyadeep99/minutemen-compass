@@ -1,5 +1,5 @@
 """
-Tool Registry for UMass Campus Agent
+Tool Registry for Minutemen Compass
 Implements various tools that the Gemini agent can call
 """
 import json

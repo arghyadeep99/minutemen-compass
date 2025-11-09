@@ -29,7 +29,7 @@ class GeminiClient:
         # self.model_name = "gemini-2.5-flash"
         self.model_name = "gemini-2.5-pro"
 
-        self.system_prompt = """You are the UMass Campus Agent, a helpful AI assistant for UMass Amherst students, faculty, and staff.
+        self.system_prompt = """You are Minutemen Compass, a helpful AI assistant for UMass Amherst students, faculty, and staff.
 
 Your role:
 - Answer questions about campus life, facilities, services, and resources

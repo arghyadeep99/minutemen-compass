@@ -1,5 +1,5 @@
 """
-UMass Campus Agent - FastAPI Backend
+Minutemen Compass - FastAPI Backend
 Main application entry point with chat endpoint and tool integrations
 """
 from dotenv import load_dotenv
@@ -19,7 +19,7 @@ from gemini_client import GeminiClient
 from tools import ToolRegistry
 from safety_checker import SafetyChecker
 
-app = FastAPI(title="UMass Campus Agent API")
+app = FastAPI(title="Minutemen Compass API")
 
 # CORS middleware
 app.add_middleware(
@@ -81,7 +81,7 @@ def log_query(user_query: str, category: str, is_flagged: bool, response: str = 
 
 @app.get("/")
 def root():
-    return {"message": "UMass Campus Agent API", "status": "running"}
+    return {"message": "Minutemen Compass API", "status": "running"}
 
 @app.post("/api/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):

@@ -2,12 +2,13 @@ import { useState, useRef, useEffect } from 'react'
 import MessageList from './MessageList'
 import MessageInput from './MessageInput'
 import QuickActions from './QuickActions'
+import { APP_NAME } from '../constants'
 
 function ChatInterface() {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: "Hi! I'm the UMass Campus Agent. I can help you find study spots, dining options, campus resources, bus schedules, and more. What can I help you with today?",
+      content: `Hi! I'm ${APP_NAME}. I can help you find study spots, dining options, campus resources, bus schedules, and more. What can I help you with today?`,
       timestamp: new Date()
     }
   ])
@@ -97,7 +98,10 @@ function ChatInterface() {
         <QuickActions onActionClick={handleQuickAction} />
         
         <div className="h-[500px] overflow-y-auto p-4 bg-gray-50">
-          <MessageList messages={messages} />
+          <MessageList 
+            messages={messages} 
+            onSuggestedQuestionClick={sendMessage}
+          />
           {isLoading && (
             <div className="flex items-center space-x-2 text-gray-500">
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-umass-maroon"></div>
