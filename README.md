@@ -188,7 +188,6 @@ This is a HackUMass 2025 project. Contributions welcome!
 - - HackUMass organizers
 
 ## Credits
-
+```
 Made by Ayush Gupta, Nilesh Nayan and Arghyadeep Das for HackUMass 2025.
-
 ```
