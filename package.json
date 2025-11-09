@@ -1,0 +1,14 @@
+{
+  "name": "minutemen-compass",
+  "version": "1.0.0",
+  "description": "A chat-based AI assistant that answers campus-specific questions for UMass Amherst students, staff, and faculty, and can take actions via tools (like finding buses, study spaces, resources) instead of just giving generic answers.",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.10.0"
+  }
+}

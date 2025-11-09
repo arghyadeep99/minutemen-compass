@@ -26,8 +26,8 @@ class GeminiClient:
         self.client = genai.Client(api_key=api_key)
 
         # Model name can be changed if you want a different one
-        # self.model_name = "gemini-2.5-flash"
-        self.model_name = "gemini-2.5-pro"
+        self.model_name = "gemini-2.5-flash"
+        # self.model_name = "gemini-2.5-pro"
 
         self.system_prompt = """You are Minutemen Compass, a helpful AI assistant for UMass Amherst students, faculty, and staff.
 
@@ -127,7 +127,7 @@ Format your responses naturally, as if talking to a friend who needs help naviga
                 name = fc.name
                 args = dict(fc.args or {})
 
-                tool_calls.append({"name": name, "arguments": args})
+                tool_calls.append({"name": name, "arguments": args, "result": result})
 
                 # Execute your local tool
                 result = tool_registry.call_tool(name, args)
@@ -208,8 +208,8 @@ Format your responses naturally, as if talking to a friend who needs help naviga
         if any(tc.get("name") == "get_course_info" for tc in tool_calls):
             suggestions.extend(
                 [
-                    "What are the prerequisites for CICS 210?",
-                    "Who teaches INFO 248?",
+                    "What are the prerequisites for COMPSCI 685?",
+                    "Who teaches COMPSCI 514?",
                     "What courses are offered in Spring 2026?",
                 ]
             )

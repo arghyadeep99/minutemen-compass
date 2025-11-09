@@ -15,9 +15,9 @@ A chat-based AI assistant that answers campus-specific questions for UMass Amher
   - Get dining options (by time, dietary preferences)
   - Access support resources (mental health, academic, financial)
   - Check PVTA bus schedules
-  - Course information (placeholder)
-  - Facility information (placeholder)
-  - Report facility issues (placeholder)
+  - Course information
+  - Facility information 
+  - Report facility issues
 - **Ethical guardrails**: Safety checks for harmful requests with appropriate campus resource suggestions
 - **Simple web UI**: Clean chat interface with quick action chips
 
@@ -71,7 +71,7 @@ A chat-based AI assistant that answers campus-specific questions for UMass Amher
 
 - Python 3.8+
 - Node.js 16+
-- OpenAI API key ([Get one here](https://platform.openai.com/api-keys))
+- Gemini API key ([Get one here](https://platform.openai.com/api-keys))
 
 ### Backend Setup
 
@@ -93,7 +93,7 @@ pip install -r requirements.txt
 
 4. Create a `.env` file in the backend directory:
 ```bash
-OPENAI_API_KEY=your_openai_api_key_here
+GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
 5. Run the backend server:
@@ -179,10 +179,16 @@ See LICENSE file for details.
 
 ## 🤝 Contributing
 
-This is a HackUMass project. Contributions welcome!
+This is a HackUMass 2025 project. Contributions welcome!
 
 ## 🙏 Acknowledgments
 
 - UMass Amherst for campus information
 - Google Gemini API
-- HackUMass organizers
+- - HackUMass organizers
+
+## Credits
+
+Made by Ayush Gupta, Nilesh Nayan and Arghyadeep Das for HackUMass 2025.
+
+```

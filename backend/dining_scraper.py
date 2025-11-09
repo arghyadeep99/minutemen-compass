@@ -2,6 +2,8 @@
 Web scraper for UMass Dining menus
 Fetches live menu data from umassdining.com
 """
+from __future__ import annotations
+
 import requests
 from bs4 import BeautifulSoup
 from typing import Dict, List, Any, Optional
@@ -500,10 +502,8 @@ class DiningScraper:
                     results.append(menu)
         
         return results
-Dining scraper: crawl the configured UMass Dining Locations & Menus page
-and follow venue links to extract structured information.
-"""
-from __future__ import annotations
+# Dining scraper: crawl the configured UMass Dining Locations & Menus page
+# and follow venue links to extract structured information.
 
 import re
 import json
@@ -953,4 +953,3 @@ def get_dining_menus_cached(
         encoding="utf-8",
     )
     return data
-

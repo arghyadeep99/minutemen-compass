@@ -125,6 +125,9 @@ function ChatInterface() {
         
         <MessageInput onSend={sendMessage} disabled={isLoading} />
       </div>
+      <div className="text-center text-xs text-gray-500 mt-2 mb-4">
+        Made by Ayush Gupta, Nilesh Nayan and Arghyadeep Das for HackUMass 2025.
+      </div>
     </div>
   )
 }

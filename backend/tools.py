@@ -230,6 +230,9 @@ class ToolRegistry:
                         },
                     },
                     "required": ["dining_hall"],
+                },
+            },
+            {
                 "name": "scrape_dining_info",
                 "description": "Scrape live dining info from the configured dining URL and filter results.",
                 "parameters": {
@@ -384,6 +387,7 @@ class ToolRegistry:
                 },
             },
         ]
+    
 
     def call_tool(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
         """Execute a tool call"""
