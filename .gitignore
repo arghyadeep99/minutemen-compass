@@ -45,3 +45,8 @@ Thumbs.db
 # Logs
 logs/
 *.log
+
+# Cache
+backend/data/cache/
+data/cache/
+*.cache

@@ -8,7 +8,7 @@ echo "🚀 Starting Minutemen Compass..."
 # Check if .env exists
 if [ ! -f "backend/.env" ]; then
     echo "⚠️  Warning: backend/.env not found!"
-    echo "Please create backend/.env with your GEMINI_API_KEY"
+    echo "Please create backend/.env with your OPENAI_API_KEY"
     echo "See backend/ENV_SETUP.md for instructions"
     exit 1
 fi

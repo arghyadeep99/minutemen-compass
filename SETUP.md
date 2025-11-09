@@ -3,7 +3,7 @@
 ## Prerequisites
 - Python 3.8+
 - Node.js 16+
-- Gemini API key
+- OpenAI API key
 
 ## Step 1: Backend Setup
 
@@ -16,7 +16,7 @@ pip install -r requirements.txt
 
 Create `backend/.env`:
 ```
-GEMINI_API_KEY=your_key_here
+OPENAI_API_KEY=your_key_here
 ```
 
 Run backend:

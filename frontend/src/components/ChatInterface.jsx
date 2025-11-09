@@ -4,6 +4,16 @@ import MessageInput from './MessageInput'
 import QuickActions from './QuickActions'
 import { APP_NAME } from '../constants'
 
+// Generate or retrieve session ID
+function getSessionId() {
+  let sessionId = localStorage.getItem('chat_session_id')
+  if (!sessionId) {
+    sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    localStorage.setItem('chat_session_id', sessionId)
+  }
+  return sessionId
+}
+
 function ChatInterface() {
   const [messages, setMessages] = useState([
     {
@@ -14,6 +24,7 @@ function ChatInterface() {
   ])
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef(null)
+  const sessionIdRef = useRef(getSessionId())
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -43,6 +54,7 @@ function ChatInterface() {
         },
         body: JSON.stringify({
           message: content.trim(),
+          session_id: sessionIdRef.current,
         }),
       })
 

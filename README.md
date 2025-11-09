@@ -71,7 +71,7 @@ A chat-based AI assistant that answers campus-specific questions for UMass Amher
 
 - Python 3.8+
 - Node.js 16+
-- Gemini API key ([Get one here](https://makersuite.google.com/app/apikey))
+- OpenAI API key ([Get one here](https://platform.openai.com/api-keys))
 
 ### Backend Setup
 
@@ -93,7 +93,7 @@ pip install -r requirements.txt
 
 4. Create a `.env` file in the backend directory:
 ```bash
-GEMINI_API_KEY=your_gemini_api_key_here
+OPENAI_API_KEY=your_openai_api_key_here
 ```
 
 5. Run the backend server:
