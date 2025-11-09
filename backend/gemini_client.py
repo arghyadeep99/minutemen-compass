@@ -26,8 +26,8 @@ class GeminiClient:
         self.client = genai.Client(api_key=api_key)
 
         # Model name can be changed if you want a different one
-        # self.model_name = "gemini-2.5-flash"
-        self.model_name = "gemini-2.5-pro"
+        self.model_name = "gemini-2.5-flash"
+        # self.model_name = "gemini-2.5-pro"
 
         self.system_prompt = """You are the UMass Campus Agent, a helpful AI assistant for UMass Amherst students, faculty, and staff.
 
@@ -53,6 +53,7 @@ Format your responses naturally, as if talking to a friend who needs help naviga
         user_message: str,
         tools_schema: List[Dict[str, Any]],
         tool_registry: Any,
+        history: list[dict[str, str]] | None = None,
     ) -> Dict[str, Any]:
         """
         Process a chat message with tool support.
@@ -79,13 +80,30 @@ Format your responses naturally, as if talking to a friend who needs help naviga
             system_instruction=self.system_prompt,
         )
 
-        # Conversation contents for this turn
-        contents: List[types.Content] = [
-            types.Content(
-                role="user",
-                parts=[types.Part(text=user_message)],
-            )
-        ]
+        # Conversation contents for this turn (include short history if provided)
+        contents: List[types.Content] = []
+
+        # Map prior turns into Gemini content objects
+        if history:
+            for item in history:
+                role = (item.get("role") or "").lower()
+                text = item.get("content") or ""
+                if not text:
+                    continue
+                # Gemini uses "user" and "model" roles
+                if role == "assistant":
+                    contents.append(
+                        types.Content(role="model", parts=[types.Part(text=text)])
+                    )
+                else:
+                    contents.append(
+                        types.Content(role="user", parts=[types.Part(text=text)])
+                    )
+
+        # Append current user message
+        contents.append(
+            types.Content(role="user", parts=[types.Part(text=user_message)])
+        )
 
         tool_calls: List[Dict[str, Any]] = []
         sources: List[str] = []

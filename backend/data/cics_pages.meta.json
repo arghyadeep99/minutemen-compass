@@ -1,0 +1,12 @@
+{
+  "last_updated_ts": 1762680168.4898765,
+  "count": 5,
+  "raw_dir": "data\\cics_pages",
+  "sources": [
+    "https://www.cics.umass.edu/advising/ms-program-advising/ms-advising-faqs",
+    "https://www.cics.umass.edu/academics/academic-policies/graduate-programs-policies/approved-alternate-courses",
+    "https://www.cics.umass.edu/academics/courses",
+    "https://www.cics.umass.edu/research/research-areas?page=0",
+    "https://www.cics.umass.edu/about/contact-us"
+  ]
+}

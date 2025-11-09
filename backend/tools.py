@@ -7,8 +7,19 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional
 from datetime import datetime
 import os
+from zoneinfo import ZoneInfo
 
 from dining_scraper import get_dining_data_cached, get_dining_menus_cached
+from cics_scraper import (
+    get_cics_pages_cached,
+    search_cics_pages as search_cics_pages_cached,
+    DEFAULT_CICS_URLS,
+    get_approved_alternate_courses_cached,
+    get_cics_faqs_cached,
+    get_cics_research_areas_cached,
+    get_cics_contacts_cached,
+    get_cics_courses_index_cached,
+)
 
 
 class ToolRegistry:
@@ -52,6 +63,17 @@ class ToolRegistry:
                 self.bus_schedules = json.load(f)
         else:
             self.bus_schedules = []
+
+        # CICS pages cache (optional)
+        cics_path = self.data_dir / "cics_pages.json"
+        if cics_path.exists():
+            try:
+                with open(cics_path, "r", encoding="utf-8") as f:
+                    self.cics_pages = json.load(f)
+            except Exception:
+                self.cics_pages = []
+        else:
+            self.cics_pages = []
 
     def get_tools_schema(self) -> List[Dict[str, Any]]:
         """Return tool schemas in Gemini function declaration format (flat list)."""
@@ -243,6 +265,171 @@ class ToolRegistry:
                     "required": [],
                 },
             },
+            {
+                "name": "get_current_time_est",
+                "description": "Get the current time in the UMass Amherst timezone (America/New_York), with multiple formats.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "format": {
+                            "type": "string",
+                            "description": "Optional key to return a single value (e.g., 'iso', 'time_24h', 'time_12h', 'date', 'weekday', 'tz_abbreviation', 'utc_offset', 'unix_epoch', 'human', 'time', 'time24', 'time12')."
+                        },
+                        "include_seconds": {
+                            "type": "boolean",
+                            "description": "Whether to include seconds in time formats (default false)."
+                        }
+                    },
+                    "required": []
+                }
+            },
+            {
+                "name": "refresh_cics_pages",
+                "description": "Fetch and cache CICS pages (MS advising FAQs, approved alternate courses, courses, research areas, contact). Stores raw HTML and searchable text.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "urls": {
+                            "type": "array",
+                            "description": "Optional list of URLs to refresh. Defaults to CICS core pages.",
+                            "items": {"type": "string"},
+                        },
+                        "force": {
+                            "type": "boolean",
+                            "description": "If true, bypass cache and force refetch (default false)."
+                        },
+                        "cache_hours": {
+                            "type": "number",
+                            "description": "Cache freshness window in hours when not forcing (default 24)."
+                        }
+                    },
+                    "required": []
+                }
+            },
+            {
+                "name": "search_cics_pages",
+                "description": "Search cached CICS pages to answer questions about CICS courses, advising, research areas, or contacts.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "query": {
+                            "type": "string",
+                            "description": "Search query, e.g., 'MS residency requirement', 'approved alternate courses for AI', 'CICS contact'."
+                        },
+                        "limit": {
+                            "type": "number",
+                            "description": "Max results to return (default 5)."
+                        }
+                    },
+                    "required": ["query"]
+                }
+            },
+            {
+                "name": "get_approved_alternate_courses",
+                "description": "Return structured list of approved alternate courses (outside CS) for the MS program parsed from the official CICS page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "filter": {
+                            "type": "string",
+                            "description": "Optional keyword filter (e.g., 'MATH', 'STAT', 'optimization')."
+                        },
+                        "limit": {
+                            "type": "number",
+                            "description": "Max number of entries to return (default 50)."
+                        },
+                        "force": {
+                            "type": "boolean",
+                            "description": "Force refresh of the source page before returning results (default false)."
+                        }
+                    },
+                    "required": []
+                }
+            },
+            {
+                "name": "get_cics_faqs",
+                "description": "Return structured MS Advising FAQs (question/answer pairs) parsed from the CICS site.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "filter": {
+                            "type": "string",
+                            "description": "Optional keyword filter applied to question and answer."
+                        },
+                        "limit": {
+                            "type": "number",
+                            "description": "Max number of FAQ entries to return (default 20)."
+                        },
+                        "force": {
+                            "type": "boolean",
+                            "description": "Force refresh of the source page before returning results (default false)."
+                        }
+                    },
+                    "required": []
+                }
+            },
+            {
+                "name": "get_cics_research_areas",
+                "description": "Return structured list of CICS research areas with short descriptions.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "filter": {
+                            "type": "string",
+                            "description": "Optional keyword filter applied to area/title and description."
+                        },
+                        "limit": {
+                            "type": "number",
+                            "description": "Max number of research areas to return (default 20)."
+                        },
+                        "force": {
+                            "type": "boolean",
+                            "description": "Force refresh of the source page before returning results (default false)."
+                        }
+                    },
+                    "required": []
+                }
+            },
+            {
+                "name": "get_cics_contacts",
+                "description": "Return structured CICS contact information (address, phone, frequently contacted offices).",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "filter": {
+                            "type": "string",
+                            "description": "Optional keyword filter applied to office names and emails."
+                        },
+                        "force": {
+                            "type": "boolean",
+                            "description": "Force refresh of the source page before returning results (default false)."
+                        }
+                    },
+                    "required": []
+                }
+            },
+            {
+                "name": "get_cics_courses_index",
+                "description": "Return structured links and sections from the CICS Courses page (schedule, descriptions, offering plan, overrides, etc.).",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "filter": {
+                            "type": "string",
+                            "description": "Optional keyword filter applied to link text."
+                        },
+                        "limit": {
+                            "type": "number",
+                            "description": "Max number of links to return (default 20)."
+                        },
+                        "force": {
+                            "type": "boolean",
+                            "description": "Force refresh of the source page before returning results (default false)."
+                        }
+                    },
+                    "required": []
+                }
+            },
         ]
 
     def call_tool(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -295,6 +482,51 @@ class ToolRegistry:
                 arguments.get("facility_name"),
                 arguments.get("issue_type"),
                 arguments.get("description"),
+            )
+        elif tool_name == "get_current_time_est":
+            return self.get_current_time_est(
+                arguments.get("format"),
+                arguments.get("include_seconds"),
+            )
+        elif tool_name == "refresh_cics_pages":
+            return self.refresh_cics_pages(
+                arguments.get("urls"),
+                arguments.get("force"),
+                arguments.get("cache_hours"),
+            )
+        elif tool_name == "search_cics_pages":
+            return self.search_cics_pages(
+                arguments.get("query"),
+                arguments.get("limit"),
+            )
+        elif tool_name == "get_approved_alternate_courses":
+            return self.get_approved_alternate_courses(
+                arguments.get("filter"),
+                arguments.get("limit"),
+                arguments.get("force"),
+            )
+        elif tool_name == "get_cics_faqs":
+            return self.get_cics_faqs(
+                arguments.get("filter"),
+                arguments.get("limit"),
+                arguments.get("force"),
+            )
+        elif tool_name == "get_cics_research_areas":
+            return self.get_cics_research_areas(
+                arguments.get("filter"),
+                arguments.get("limit"),
+                arguments.get("force"),
+            )
+        elif tool_name == "get_cics_contacts":
+            return self.get_cics_contacts(
+                arguments.get("filter"),
+                arguments.get("force"),
+            )
+        elif tool_name == "get_cics_courses_index":
+            return self.get_cics_courses_index(
+                arguments.get("filter"),
+                arguments.get("limit"),
+                arguments.get("force"),
             )
         else:
             return {"error": f"Unknown tool: {tool_name}"}
@@ -361,8 +593,9 @@ class ToolRegistry:
     ) -> Dict[str, Any]:
         """Find dining options"""
         if time_now == "now" or not time_now:
-            current_hour = datetime.now().hour
-            current_minute = datetime.now().minute
+            now_et = datetime.now(ZoneInfo("America/New_York"))
+            current_hour = now_et.hour
+            current_minute = now_et.minute
             time_now = f"{current_hour:02d}:{current_minute:02d}"
 
         results = []
@@ -588,15 +821,111 @@ class ToolRegistry:
         course_code: Optional[str] = None,
         info_type: Optional[str] = None,
     ) -> Dict[str, Any]:
-        """Get course information (placeholder)"""
-        # This would integrate with UMass course catalog API
+        """
+        Get course information by searching cached CICS pages.
+        Falls back to refreshing the cache if needed.
+        """
+        # Build a query string from provided parts
+        parts = []
+        if course_code:
+            parts.append(str(course_code))
+        if info_type:
+            parts.append(str(info_type))
+        query = " ".join(parts).strip() or "CICS courses"
+
+        # Special-case: direct ask for approved alternate courses
+        q_lower = query.lower()
+        if any(k in q_lower for k in [
+            "approved alternate",
+            "outside of computer science",
+            "outside computer science",
+            "non-cs courses",
+            "non cs courses",
+            "approved umass amherst courses outside",
+            "approved courses outside cs",
+        ]):
+            return self.get_approved_alternate_courses(filter=None, limit=100, force=False)
+
+        # Ensure cache is present; if not, load it
+        if not getattr(self, "cics_pages", None):
+            try:
+                self.cics_pages = get_cics_pages_cached(
+                    urls=DEFAULT_CICS_URLS,
+                    cache_hours=24,
+                    data_dir=self.data_dir,
+                    force=False,
+                )
+            except Exception:
+                self.cics_pages = []
+
+        # Search cached pages
+        result = search_cics_pages_cached(
+            query=query,
+            data_dir=self.data_dir,
+            limit=5,
+        )
+
+        # If nothing found, try a forced refresh and search again
+        if not result.get("results"):
+            try:
+                self.cics_pages = get_cics_pages_cached(
+                    urls=DEFAULT_CICS_URLS,
+                    cache_hours=24,
+                    data_dir=self.data_dir,
+                    force=True,
+                )
+                result = search_cics_pages_cached(
+                    query=query,
+                    data_dir=self.data_dir,
+                    limit=5,
+                )
+            except Exception as e:
+                return {
+                    "message": "Unable to fetch course information at this time.",
+                    "error": str(e),
+                    "query": query,
+                }
+
+        # Attach original query for context
+        result["query"] = query
+        return result
+
+    def get_approved_alternate_courses(
+        self,
+        filter: Optional[str] = None,
+        limit: Optional[int] = 50,
+        force: Optional[bool] = False,
+    ) -> Dict[str, Any]:
+        """
+        Return structured list of approved alternate courses parsed from CICS page.
+        Supports optional keyword filtering and limiting.
+        """
+        data = get_approved_alternate_courses_cached(
+            data_dir=self.data_dir,
+            force=bool(force),
+        )
+        items = data.get("results", [])
+        if filter and isinstance(filter, str) and filter.strip():
+            q = filter.strip().lower()
+            def matches(entry: Dict[str, Any]) -> bool:
+                hay = " ".join([
+                    str(entry.get("department") or ""),
+                    str(entry.get("course_number") or ""),
+                    str(entry.get("course_code") or ""),
+                    str(entry.get("title_or_notes") or ""),
+                    str(entry.get("raw") or ""),
+                ]).lower()
+                return q in hay
+            items = [e for e in items if matches(e)]
+
+        max_n = int(limit) if isinstance(limit, (int, float)) else 50
+        items = items[:max_n]
+
         return {
-            "message": "Course information lookup is currently being set up.",
-            "suggestion": (
-                f"For information about {course_code}, please check SPIRE "
-                "or contact the department directly."
-            ),
-            "info_type": info_type,
+            "source_url": data.get("source_url"),
+            "count": len(items),
+            "results": items,
+            "note": "Structured extraction of approved alternate courses (heuristic).",
         }
 
     def get_facility_info(
@@ -626,3 +955,198 @@ class ToolRegistry:
             "issue_type": issue_type,
             "description": description,
         }
+
+    def get_current_time_est(
+        self,
+        format: Optional[str] = None,
+        include_seconds: Optional[bool] = False,
+    ) -> Dict[str, Any]:
+        """
+        Get the current time in the UMass Amherst timezone (America/New_York).
+        Returns multiple formatted representations and timezone metadata.
+        """
+        tz = ZoneInfo("America/New_York")
+        now_et = datetime.now(tz)
+
+        def fmt_offset(dt: datetime) -> str:
+            offset = dt.utcoffset()
+            if offset is None:
+                return "+00:00"
+            total_seconds = int(offset.total_seconds())
+            sign = "+" if total_seconds >= 0 else "-"
+            total_seconds = abs(total_seconds)
+            hours = total_seconds // 3600
+            minutes = (total_seconds % 3600) // 60
+            return f"{sign}{hours:02d}:{minutes:02d}"
+
+        time_fmt = "%H:%M:%S" if include_seconds else "%H:%M"
+        time_12_fmt = "%I:%M:%S %p" if include_seconds else "%I:%M %p"
+
+        payload: Dict[str, Any] = {
+            "iso": now_et.isoformat(),
+            "date": now_et.strftime("%Y-%m-%d"),
+            "time_24h": now_et.strftime(time_fmt),
+            "time_12h": now_et.strftime(time_12_fmt),
+            "weekday": now_et.strftime("%A"),
+            "tz_name": "America/New_York",
+            "tz_abbreviation": now_et.tzname(),
+            "utc_offset": fmt_offset(now_et),
+            "unix_epoch": int(now_et.timestamp()),
+            "human": now_et.strftime("%a %b %d, %Y %I:%M %p %Z"),
+        }
+
+        if format:
+            key = format.lower()
+            if key in payload:
+                return {"format": key, "value": payload[key]}
+            aliases = {
+                "time": "time_24h",
+                "time24": "time_24h",
+                "time12": "time_12h",
+                "tz": "tz_abbreviation",
+            }
+            if key in aliases and aliases[key] in payload:
+                alias_key = aliases[key]
+                return {"format": key, "value": payload[alias_key]}
+            return {
+                "error": f"Unknown format '{format}'. Available keys: {', '.join(sorted(payload.keys()))}",
+                "available": sorted(payload.keys()),
+            }
+
+        return payload
+
+    def refresh_cics_pages(
+        self,
+        urls: Optional[List[str]] = None,
+        force: Optional[bool] = False,
+        cache_hours: Optional[int] = 24,
+    ) -> Dict[str, Any]:
+        """
+        Refresh or load cached CICS pages and keep them in memory for quick search.
+        """
+        # When not forcing, respect cache_hours. When forcing, this simply re-scrapes.
+        records = get_cics_pages_cached(
+            urls=urls or DEFAULT_CICS_URLS,
+            cache_hours=int(cache_hours) if isinstance(cache_hours, (int, float)) else 24,
+            data_dir=self.data_dir,
+            force=bool(force),
+        )
+        # Update in-memory cache
+        try:
+            self.cics_pages = records
+        except Exception:
+            pass
+
+        # Opportunistically (re)build structured caches for model-friendly consumption
+        try:
+            get_cics_faqs_cached(data_dir=self.data_dir, force=False)
+            get_cics_research_areas_cached(data_dir=self.data_dir, force=False)
+            get_cics_contacts_cached(data_dir=self.data_dir, force=False)
+            get_cics_courses_index_cached(data_dir=self.data_dir, force=False)
+        except Exception:
+            # Non-fatal; search still works based on text index
+            pass
+        return {
+            "message": "CICS pages refreshed",
+            "count": len(records),
+            "default_sources": DEFAULT_CICS_URLS,
+        }
+
+    def search_cics_pages(
+        self,
+        query: Optional[str],
+        limit: Optional[int] = 5,
+    ) -> Dict[str, Any]:
+        """
+        Search CICS cached pages. If cache missing, attempt to load it.
+        """
+        if not query or not isinstance(query, str) or not query.strip():
+            return {"error": "Query cannot be empty."}
+
+        # Try searching directly; if no cache, the helper returns with a note.
+        result = search_cics_pages_cached(
+            query=query,
+            data_dir=self.data_dir,
+            limit=int(limit) if isinstance(limit, (int, float)) else 5,
+        )
+
+        # Keep a small reference to last search results
+        result["sources"] = ["Tool: search_cics_pages"]
+        return result
+
+    def get_cics_faqs(
+        self,
+        filter: Optional[str] = None,
+        limit: Optional[int] = 20,
+        force: Optional[bool] = False,
+    ) -> Dict[str, Any]:
+        data = get_cics_faqs_cached(data_dir=self.data_dir, force=bool(force))
+        items = data.get("results", [])
+        if filter and isinstance(filter, str) and filter.strip():
+            q = filter.strip().lower()
+            items = [
+                it for it in items
+                if q in (it.get("question", "").lower() + " " + it.get("answer", "").lower())
+            ]
+        max_n = int(limit) if isinstance(limit, (int, float)) else 20
+        items = items[:max_n]
+        return {"source_url": data.get("source_url"), "count": len(items), "results": items}
+
+    def get_cics_research_areas(
+        self,
+        filter: Optional[str] = None,
+        limit: Optional[int] = 20,
+        force: Optional[bool] = False,
+    ) -> Dict[str, Any]:
+        data = get_cics_research_areas_cached(data_dir=self.data_dir, force=bool(force))
+        items = data.get("results", [])
+        if filter and isinstance(filter, str) and filter.strip():
+            q = filter.strip().lower()
+            items = [
+                it for it in items
+                if q in (it.get("area", "").lower() + " " + it.get("description", "").lower())
+            ]
+        max_n = int(limit) if isinstance(limit, (int, float)) else 20
+        items = items[:max_n]
+        return {"source_url": data.get("source_url"), "count": len(items), "results": items}
+
+    def get_cics_contacts(
+        self,
+        filter: Optional[str] = None,
+        force: Optional[bool] = False,
+    ) -> Dict[str, Any]:
+        data = get_cics_contacts_cached(data_dir=self.data_dir, force=bool(force))
+        result = data.get("results", {})
+        if not isinstance(result, dict):
+            return {"source_url": data.get("source_url"), "results": result}
+
+        offices = result.get("offices") or []
+        if filter and isinstance(filter, str) and filter.strip():
+            q = filter.strip().lower()
+            offices = [
+                o for o in offices
+                if q in (o.get("office", "") or "").lower() or q in (o.get("email", "") or "").lower()
+            ]
+        trimmed = {
+            "address": result.get("address"),
+            "main_phone": result.get("main_phone"),
+            "dean": result.get("dean"),
+            "offices": offices,
+        }
+        return {"source_url": data.get("source_url"), "count": len(offices), "results": trimmed}
+
+    def get_cics_courses_index(
+        self,
+        filter: Optional[str] = None,
+        limit: Optional[int] = 20,
+        force: Optional[bool] = False,
+    ) -> Dict[str, Any]:
+        data = get_cics_courses_index_cached(data_dir=self.data_dir, force=bool(force))
+        index = data.get("results", {}) or {}
+        links = index.get("links", []) if isinstance(index, dict) else []
+        if filter and isinstance(filter, str) and filter.strip():
+            q = filter.strip().lower()
+            links = [l for l in links if q in (l.get("text", "") or "").lower()]
+        max_n = int(limit) if isinstance(limit, (int, float)) else 20
+        links = links[:max_n]
+        return {"source_url": data.get("source_url"), "count": len(links), "results": {"links": links}}

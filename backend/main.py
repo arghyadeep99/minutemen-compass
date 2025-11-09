@@ -14,8 +14,10 @@ import os
 from datetime import datetime
 import sqlite3
 from pathlib import Path
+import uuid
 
 from gemini_client import GeminiClient
+from openai_client import OpenAIClient
 from tools import ToolRegistry
 from safety_checker import SafetyChecker
 
@@ -31,7 +33,11 @@ app.add_middleware(
 )
 
 # Initialize components
-gemini_client = GeminiClient()
+provider = os.getenv("LLM_PROVIDER", "gemini").lower()
+if provider == "openai":
+    llm_client = OpenAIClient()
+else:
+    llm_client = GeminiClient()
 tool_registry = ToolRegistry()
 safety_checker = SafetyChecker()
 
@@ -68,6 +74,10 @@ class ChatResponse(BaseModel):
     tool_calls: Optional[List[Dict[str, Any]]] = None
     suggested_questions: Optional[List[str]] = None
 
+# Simple in-memory session store for last 10 messages (user/assistant)
+# Format: { session_id: [ { "role": "user"|"assistant", "content": str }, ... ] }
+SESSION_MEMORY: Dict[str, List[Dict[str, str]]] = {}
+
 def log_query(user_query: str, category: str, is_flagged: bool, response: str = ""):
     """Log user queries to database"""
     conn = sqlite3.connect(DB_PATH)
@@ -86,8 +96,8 @@ def root():
 @app.post("/api/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     """
-    Main chat endpoint that processes user messages through Gemini
-    with tool support and safety checks
+    Main chat endpoint that processes user messages through the configured LLM
+    with tool support and safety checks.
     """
     user_message = request.message.strip()
     
@@ -108,15 +118,22 @@ async def chat(request: ChatRequest):
             ]
         )
     
-    # Get tool schemas for Gemini
+    # Get tool schemas for tool use
     tools_schema = tool_registry.get_tools_schema()
     
-    # Call Gemini with tools
+    # Call configured LLM with tools
     try:
-        response = await gemini_client.chat_with_tools(
+        # Resolve session and history
+        session_id = request.session_id
+        history: Optional[List[Dict[str, str]]] = None
+        if session_id:
+            history = (SESSION_MEMORY.get(session_id) or [])[-10:]
+
+        response = await llm_client.chat_with_tools(
             user_message=user_message,
             tools_schema=tools_schema,
-            tool_registry=tool_registry
+            tool_registry=tool_registry,
+            history=history,
         )
         
         # Determine category
@@ -131,6 +148,16 @@ async def chat(request: ChatRequest):
             category = "transport"
         
         log_query(user_message, category, False, response["reply"])
+
+        # Update session memory with this user turn and assistant reply
+        if session_id:
+            previous = SESSION_MEMORY.get(session_id) or []
+            updated = previous + [
+                {"role": "user", "content": user_message},
+                {"role": "assistant", "content": response["reply"]},
+            ]
+            # Keep only last 10 messages
+            SESSION_MEMORY[session_id] = updated[-10:]
         
         return ChatResponse(
             reply=response["reply"],

@@ -4,6 +4,7 @@ import MessageInput from './MessageInput'
 import QuickActions from './QuickActions'
 
 function ChatInterface() {
+  const [sessionId, setSessionId] = useState(null)
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
@@ -13,6 +14,21 @@ function ChatInterface() {
   ])
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef(null)
+
+  // Initialize or restore a session id so backend can maintain memory
+  useEffect(() => {
+    let sid = localStorage.getItem('chat_session_id')
+    if (!sid) {
+      // Prefer crypto.randomUUID if available
+      if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+        sid = window.crypto.randomUUID()
+      } else {
+        sid = `sid_${Math.random().toString(36).slice(2)}_${Date.now()}`
+      }
+      localStorage.setItem('chat_session_id', sid)
+    }
+    setSessionId(sid)
+  }, [])
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -42,6 +58,7 @@ function ChatInterface() {
         },
         body: JSON.stringify({
           message: content.trim(),
+          session_id: sessionId || undefined,
         }),
       })
 
