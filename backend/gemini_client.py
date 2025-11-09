@@ -204,6 +204,15 @@ Format your responses naturally, as if talking to a friend who needs help naviga
                 ]
             )
 
+        if any(tc.get("name") == "get_course_info" for tc in tool_calls):
+            suggestions.extend(
+                [
+                    "What are the prerequisites for CICS 210?",
+                    "Who teaches INFO 248?",
+                    "What courses are offered in Spring 2026?",
+                ]
+            )
+
         if not suggestions:
             suggestions = [
                 "Find a quiet study spot",

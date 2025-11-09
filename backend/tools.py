@@ -3,11 +3,14 @@ Tool Registry for UMass Campus Agent
 Implements various tools that the LangGraph agent can call
 """
 import json
+import re
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from datetime import datetime
 
 from dining_scraper import DiningScraper
+from course_scraper import CourseScraper
+from bus_schedule_parser import BusScheduleParser
 
 
 class ToolRegistry:
@@ -17,6 +20,8 @@ class ToolRegistry:
         self.data_dir = Path("data")
         self.data_dir.mkdir(parents=True, exist_ok=True)
         self.dining_scraper = DiningScraper(cache_dir=self.data_dir / "cache")
+        self.course_scraper = CourseScraper(cache_dir=self.data_dir / "cache")
+        self.bus_schedule_parser = BusScheduleParser(cache_dir=self.data_dir / "cache")
         self._load_data()
 
     def _load_data(self):
@@ -52,6 +57,80 @@ class ToolRegistry:
                 self.dining_info = json.load(f)
         else:
             self.dining_info = []
+
+        # Courses - Load from cache/JSON file only (no web requests on startup)
+        self.courses = []
+        self.courses_by_code = {}
+        
+        # First, try to load from cache files directly (no web requests)
+        try:
+            fall_cache_path = self.course_scraper._get_cache_path("Fall 2025")
+            spring_cache_path = self.course_scraper._get_cache_path("Spring 2026")
+            
+            cached_courses = []
+            
+            # Load Fall 2025 from cache if valid
+            fall_courses = self.course_scraper._load_cache(fall_cache_path)
+            if fall_courses:
+                cached_courses.extend(fall_courses)
+            
+            # Load Spring 2026 from cache if valid
+            spring_courses = self.course_scraper._load_cache(spring_cache_path)
+            if spring_courses:
+                cached_courses.extend(spring_courses)
+            
+            # If cache has courses, use them
+            if cached_courses:
+                # Build lookup by course code
+                courses_by_code = {}
+                for course in cached_courses:
+                    code = course.get("course_code", "")
+                    if code:
+                        if code not in courses_by_code:
+                            courses_by_code[code] = []
+                        courses_by_code[code].append(course)
+                
+                self.courses = cached_courses
+                self.courses_by_code = courses_by_code
+        except Exception as e:
+            # Silently fail and fall back to JSON
+            pass
+        
+        # Fallback to JSON file if cache is empty or failed
+        if not self.courses:
+            courses_path = self.data_dir / "courses.json"
+            if courses_path.exists():
+                try:
+                    with open(courses_path, "r") as f:
+                        courses_data = json.load(f)
+                        self.courses = courses_data.get("courses", [])
+                        self.courses_by_code = courses_data.get("courses_by_code", {})
+                        
+                        # Populate cache from JSON for future use (silently)
+                        if self.courses:
+                            try:
+                                self._populate_course_cache(self.courses)
+                            except Exception:
+                                pass
+                except Exception:
+                    self.courses = []
+                    self.courses_by_code = {}
+    
+    def _populate_course_cache(self, courses: List[Dict[str, Any]]):
+        """Populate course cache files from course data"""
+        # Group courses by semester
+        courses_by_semester = {}
+        for course in courses:
+            semester = course.get("semester", "")
+            if semester:
+                if semester not in courses_by_semester:
+                    courses_by_semester[semester] = []
+                courses_by_semester[semester].append(course)
+        
+        # Save each semester to its cache file
+        for semester, semester_courses in courses_by_semester.items():
+            cache_path = self.course_scraper._get_cache_path(semester)
+            self.course_scraper._save_cache(cache_path, semester_courses)
 
     def get_tools_schema(self) -> List[Dict[str, Any]]:
         """Return tool schemas in Gemini function declaration format (flat list)."""
@@ -158,10 +237,14 @@ class ToolRegistry:
             },
             {
                 "name": "get_bus_schedule",
-                "description": "Get PVTA bus schedule information between campus locations",
+                "description": "Get PVTA bus schedule information for UMass Amherst. USE THIS TOOL when users ask about bus routes (e.g., 'route 31', 'bus 30', 'what is route B43'), bus schedules, next bus times, or bus stops. The tool downloads and parses actual PDF schedules from configured URLs. Uses EST timezone.",
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "route_number": {
+                            "type": "string",
+                            "description": "Bus route number (e.g., '30', '31', 'B43', '35'). EXTRACT THIS FROM THE USER'S QUERY - if they mention a route number, you MUST provide it here.",
+                        },
                         "origin": {
                             "type": "string",
                             "description": "Starting location (e.g., 'Campus Center', 'Puffton', 'North Village')",
@@ -169,6 +252,10 @@ class ToolRegistry:
                         "destination": {
                             "type": "string",
                             "description": "Destination location",
+                        },
+                        "stop": {
+                            "type": "string",
+                            "description": "Specific stop name to get next bus times",
                         },
                     },
                     "required": [],
@@ -263,8 +350,10 @@ class ToolRegistry:
             return self.get_support_resources(arguments.get("topic"))
         elif tool_name == "get_bus_schedule":
             return self.get_bus_schedule(
-                arguments.get("origin"),
-                arguments.get("destination"),
+                route_number=arguments.get("route_number"),
+                origin=arguments.get("origin"),
+                destination=arguments.get("destination"),
+                stop=arguments.get("stop"),
             )
         elif tool_name == "get_course_info":
             return self.get_course_info(
@@ -704,20 +793,188 @@ class ToolRegistry:
 
     def get_bus_schedule(
         self,
+        route_number: Optional[str] = None,
         origin: Optional[str] = None,
         destination: Optional[str] = None,
+        stop: Optional[str] = None,
     ) -> Dict[str, Any]:
-        """Get bus schedule information"""
+        """Get bus schedule information from PDF or fallback to JSON"""
+        # Debug logging
+        print(f"[DEBUG] get_bus_schedule called with: route_number={route_number}, origin={origin}, destination={destination}, stop={stop}")
+        
+        # If PDF URLs are configured, ALWAYS prioritize PDF parsing
+        has_pdf_config = bool(self.bus_schedule_parser.pdf_urls)
+        print(f"[DEBUG] PDF URLs configured: {has_pdf_config}, URLs: {list(self.bus_schedule_parser.pdf_urls.keys())}")
+        
+        # If route_number is provided and PDF URLs are configured, use PDF parser
+        if route_number and has_pdf_config:
+            # Check if route exists in PDF URLs
+            route_in_config = route_number in self.bus_schedule_parser.pdf_urls
+            
+            if route_in_config or "_default" in self.bus_schedule_parser.pdf_urls:
+                try:
+                    # Parse PDF for this specific route
+                    schedule_data = self.bus_schedule_parser.parse_pdf(
+                        route_number=route_number if route_in_config else None,
+                        use_cache=True
+                    )
+                    
+                    # Check if we got valid schedule data
+                    print(f"[DEBUG] Schedule data keys: {list(schedule_data.keys())}")
+                    if "error" not in schedule_data:
+                        schedules = schedule_data.get("schedules", {})
+                        print(f"[DEBUG] Found {len(schedules)} routes in parsed data")
+                        
+                        # Convert schedules dict to list format with comprehensive data
+                        pdf_routes = []
+                        for route_num, route_data in schedules.items():
+                            # Match the requested route number
+                            if route_number.upper() in route_num.upper() or route_num.upper() in route_number.upper():
+                                # Calculate total schedule times
+                                schedule_times = route_data.get("schedule_times", {})
+                                total_times = sum(
+                                    len(v.get("times", [])) if isinstance(v, dict) else 0 
+                                    for v in schedule_times.values()
+                                )
+                                
+                                pdf_routes.append({
+                                    "route_number": route_num,
+                                    "route_name": route_data.get("route_name", f"Route {route_num}"),
+                                    "stops": route_data.get("stops", []),
+                                    "directions": route_data.get("directions", []),
+                                    "days_of_operation": route_data.get("days_of_operation", []),
+                                    "effective_date": route_data.get("effective_date", ""),
+                                    "schedule_times": schedule_times,
+                                    "total_schedule_times": total_times,
+                                    "schedule_lines": route_data.get("schedule_lines", [])[:20],  # More schedule context
+                                    "raw_text": route_data.get("raw_text", [])[:30]  # More context for AI
+                                })
+                        
+                        print(f"[DEBUG] Matched {len(pdf_routes)} routes for route_number={route_number}")
+                        
+                        # If we found routes in PDF, use them
+                        if pdf_routes:
+                            print(f"[DEBUG] Returning PDF data with {len(pdf_routes)} routes")
+                            # If stop is provided, get next bus times
+                            if stop:
+                                next_times = self.bus_schedule_parser.get_next_bus_times(
+                                    route_number=route_number,
+                                    stop=stop
+                                )
+                                
+                                if "error" not in next_times:
+                                    return {
+                                        "results": pdf_routes,
+                                        "next_times": next_times,
+                                        "count": len(pdf_routes),
+                                        "recommendation": (
+                                            f"Found route {route_number} from PDF schedule. "
+                                            f"Next buses at {stop}: {', '.join(next_times.get('next_times', [])[:3])}"
+                                        ),
+                                        "source": "PDF schedule"
+                                    }
+                            
+                            return {
+                                "results": pdf_routes,
+                                "count": len(pdf_routes),
+                                "recommendation": f"Found {len(pdf_routes)} route(s) matching '{route_number}' from PDF schedule.",
+                                "source": "PDF schedule",
+                                "schedule_info": pdf_routes[0].get("schedule_lines", [])[:5] if pdf_routes else []
+                            }
+                        else:
+                            # PDF parsed but route not found - try find_route as fallback
+                            print(f"[DEBUG] No routes matched in parsed data, trying find_route...")
+                            pdf_routes = self.bus_schedule_parser.find_route(
+                                route_number=route_number,
+                                route_name=None
+                            )
+                            if pdf_routes:
+                                print(f"[DEBUG] find_route found {len(pdf_routes)} routes")
+                                return {
+                                    "results": pdf_routes,
+                                    "count": len(pdf_routes),
+                                    "recommendation": f"Found {len(pdf_routes)} route(s) matching '{route_number}' from PDF schedule.",
+                                    "source": "PDF schedule"
+                                }
+                            else:
+                                # PDF parsed but route still not found
+                                print(f"[WARNING] PDF parsed but route {route_number} not found in schedules")
+                                # Return what we have anyway, or return error
+                                if schedules:
+                                    # Return all schedules found as fallback
+                                    all_routes = []
+                                    for route_num, route_data in schedules.items():
+                                        all_routes.append({
+                                            "route_number": route_num,
+                                            "route_name": route_data.get("route_name", f"Route {route_num}"),
+                                            "stops": route_data.get("stops", []),
+                                            "raw_text": route_data.get("raw_text", [])[:20],
+                                            "schedule_lines": route_data.get("schedule_lines", [])[:10]
+                                        })
+                                    return {
+                                        "results": all_routes,
+                                        "count": len(all_routes),
+                                        "recommendation": f"Found {len(all_routes)} route(s) in PDF (requested route {route_number} not found, showing all available routes).",
+                                        "source": "PDF schedule"
+                                    }
+                    else:
+                        # PDF parsing failed - return error info but don't fall back to JSON
+                        # Only use JSON if PDF URLs are NOT configured
+                        error_msg = schedule_data.get("error", "Unknown error")
+                        print(f"[ERROR] PDF parsing failed: {error_msg}")
+                        return {
+                            "results": [],
+                            "count": 0,
+                            "recommendation": f"Could not parse PDF schedule for route {route_number}: {error_msg}. Please ensure PyPDF2 or pdfplumber is installed: pip install PyPDF2 pdfplumber",
+                            "source": "PDF schedule (error)",
+                            "error": error_msg
+                        }
+                except Exception as e:
+                    # Log error and return error response instead of falling back to JSON
+                    import traceback
+                    error_msg = str(e)
+                    print(f"Error parsing PDF for route {route_number}: {error_msg}")
+                    traceback.print_exc()
+                    return {
+                        "results": [],
+                        "count": 0,
+                        "recommendation": f"Error parsing PDF schedule for route {route_number}: {error_msg}",
+                        "source": "PDF schedule (error)",
+                        "error": error_msg
+                    }
+        
+        # Fallback to JSON data ONLY if:
+        # 1. PDF URLs are NOT configured, OR
+        # 2. Query is by origin/destination (not route_number)
+        # NEVER fall back to JSON if route_number is provided and PDF URLs are configured
+        
+        # If route_number was provided and PDF URLs are configured, we should have returned above
+        # So if we reach here with route_number, it means PDF URLs are NOT configured
+        if route_number and not has_pdf_config:
+            # Route number query but no PDF config - use JSON
+            results = []
+            for schedule in self.bus_schedules:
+                if route_number.lower() in schedule.get("route", "").lower():
+                    results.append(schedule)
+            
+            results = results[:3]
+            return {
+                "results": results,
+                "count": len(results),
+                "recommendation": f"Found {len(results)} bus routes (using fallback data).",
+                "source": "JSON fallback"
+            }
+        
+        # Origin/destination queries - use JSON fallback
         results = []
-
         for schedule in self.bus_schedules:
             if origin and destination:
                 if (
                     origin.lower() in schedule.get("route", "").lower()
-                    or origin.lower() in schedule.get("stops", [])
+                    or origin.lower() in [s.lower() for s in schedule.get("stops", [])]
                 ) and (
                     destination.lower() in schedule.get("route", "").lower()
-                    or destination.lower() in schedule.get("stops", [])
+                    or destination.lower() in [s.lower() for s in schedule.get("stops", [])]
                 ):
                     results.append(schedule)
             elif origin:
@@ -726,6 +983,7 @@ class ToolRegistry:
                 ]:
                     results.append(schedule)
             else:
+                # No specific query - return all
                 results.append(schedule)
 
         results = results[:3]
@@ -734,6 +992,7 @@ class ToolRegistry:
             "results": results,
             "count": len(results),
             "recommendation": f"Found {len(results)} bus routes.",
+            "source": "JSON fallback"
         }
 
     def get_course_info(
@@ -741,15 +1000,101 @@ class ToolRegistry:
         course_code: Optional[str] = None,
         info_type: Optional[str] = None,
     ) -> Dict[str, Any]:
-        """Get course information (placeholder)"""
-        # This would integrate with UMass course catalog API
+        """Get course information from the course knowledge base"""
+        if not course_code:
+            # Return all courses if no specific code provided
+            return {
+                "results": self.courses,
+                "count": len(self.courses),
+                "recommendation": f"Found {len(self.courses)} courses. Please specify a course code (e.g., 'CICS 110') for detailed information.",
+            }
+        
+        # Normalize course code (handle variations like "CICS110", "CICS 110", "cics 110")
+        course_code_normalized = re.sub(r'\s+', ' ', course_code.upper().strip())
+        
+        # Try exact match first
+        matching_courses = self.courses_by_code.get(course_code_normalized, [])
+        
+        # If no exact match, try fuzzy matching
+        if not matching_courses:
+            # Try matching without spaces
+            course_code_no_space = course_code_normalized.replace(' ', '')
+            for code, courses in self.courses_by_code.items():
+                if code.replace(' ', '') == course_code_no_space:
+                    matching_courses = courses
+                    break
+        
+        # If still no match, try partial matching
+        if not matching_courses:
+            for code, courses in self.courses_by_code.items():
+                if course_code_normalized in code or code in course_code_normalized:
+                    matching_courses = courses
+                    break
+        
+        if not matching_courses:
+            # Try searching in course titles and descriptions
+            search_term = course_code_normalized.lower()
+            for course in self.courses:
+                if (search_term in course.get("course_code", "").lower() or
+                    search_term in course.get("course_title", "").lower() or
+                    search_term in course.get("description", "").lower()):
+                    matching_courses.append(course)
+        
+        if not matching_courses:
+            return {
+                "results": [],
+                "count": 0,
+                "recommendation": (
+                    f"No course found matching '{course_code}'. "
+                    "Available courses include CICS 110, CICS 160, CICS 210, INFO 248, COMPSCI 240, etc. "
+                    "Please check the course code and try again."
+                ),
+            }
+        
+        # Filter by info_type if specified
+        results = []
+        for course in matching_courses:
+            if info_type:
+                info_type_lower = info_type.lower()
+                filtered_course = {"course_code": course.get("course_code"), "course_title": course.get("course_title")}
+                
+                if info_type_lower in ["content", "description", "details"]:
+                    filtered_course["description"] = course.get("description", "")
+                    filtered_course["instructors"] = course.get("instructors", [])
+                    filtered_course["credits"] = course.get("credits")
+                    filtered_course["semester"] = course.get("semester")
+                elif info_type_lower in ["prerequisite", "prerequisites", "prereq"]:
+                    filtered_course["prerequisites"] = course.get("prerequisites", "")
+                elif info_type_lower in ["instructor", "instructors", "professor", "prof"]:
+                    filtered_course["instructors"] = course.get("instructors", [])
+                elif info_type_lower in ["schedule", "time", "meeting"]:
+                    filtered_course["schedule"] = course.get("schedule")
+                    filtered_course["semester"] = course.get("semester")
+                else:
+                    # Return all info if info_type not recognized
+                    filtered_course = course
+                
+                results.append(filtered_course)
+            else:
+                # Return all course information
+                results.append(course)
+        
+        # Remove duplicates based on course_code and semester
+        seen = set()
+        unique_results = []
+        for course in results:
+            key = (course.get("course_code"), course.get("semester"))
+            if key not in seen:
+                seen.add(key)
+                unique_results.append(course)
+        
         return {
-            "message": "Course information lookup is currently being set up.",
-            "suggestion": (
-                f"For information about {course_code}, please check SPIRE "
-                "or contact the department directly."
+            "results": unique_results,
+            "count": len(unique_results),
+            "recommendation": (
+                f"Found {len(unique_results)} course(s) matching '{course_code}'. "
+                f"{'Filtered by ' + info_type + '.' if info_type else 'Showing all available information.'}"
             ),
-            "info_type": info_type,
         }
 
     def get_facility_info(

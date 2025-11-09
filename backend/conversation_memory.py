@@ -100,13 +100,28 @@ class ConversationMemory:
             elif msg_type == "ai":
                 # Reconstruct AIMessage with tool_calls if present
                 msg = AIMessage(content=content)
-                if "tool_calls" in metadata:
-                    msg.tool_calls = metadata["tool_calls"]
+                if "tool_calls" in metadata and metadata["tool_calls"]:
+                    # Ensure tool_calls is properly formatted
+                    tool_calls = metadata["tool_calls"]
+                    # Convert to proper format if needed
+                    if isinstance(tool_calls, list) and len(tool_calls) > 0:
+                        # Ensure each tool_call has required fields
+                        formatted_tool_calls = []
+                        for tc in tool_calls:
+                            if isinstance(tc, dict):
+                                # Ensure it has 'id' field for LangChain compatibility
+                                if "id" not in tc:
+                                    import uuid
+                                    tc["id"] = str(uuid.uuid4())
+                                formatted_tool_calls.append(tc)
+                        msg.tool_calls = formatted_tool_calls
                 messages.append(msg)
             elif msg_type == "system":
                 messages.append(SystemMessage(content=content))
             elif msg_type == "tool":
-                messages.append(ToolMessage(content=content, tool_call_id=metadata.get("tool_call_id", "")))
+                tool_call_id = metadata.get("tool_call_id", "")
+                if tool_call_id:  # Only add ToolMessage if it has a valid tool_call_id
+                    messages.append(ToolMessage(content=content, tool_call_id=tool_call_id))
         
         # Cache the messages
         if len(self._cache) >= self._max_cache_size:

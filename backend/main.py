@@ -83,6 +83,48 @@ def log_query(user_query: str, category: str, is_flagged: bool, response: str = 
 def root():
     return {"message": "UMass Campus Agent API", "status": "running"}
 
+@app.get("/api/health")
+def health_check():
+    """Health check endpoint to verify API connectivity"""
+    try:
+        # Check if OpenAI API key is set
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            return {
+                "status": "error",
+                "message": "OPENAI_API_KEY not set",
+                "details": "Please set OPENAI_API_KEY in your .env file"
+            }
+        
+        # Check if components are initialized
+        checks = {
+            "langgraph_agent": langgraph_agent is not None,
+            "tool_registry": tool_registry is not None,
+            "safety_checker": safety_checker is not None,
+            "openai_api_key_set": bool(api_key),
+            "openai_api_key_length": len(api_key) if api_key else 0
+        }
+        
+        # Try a simple test (don't actually call API, just check initialization)
+        if langgraph_agent and langgraph_agent.model:
+            checks["openai_model_initialized"] = True
+        else:
+            checks["openai_model_initialized"] = False
+        
+        all_ok = all(checks.values())
+        
+        return {
+            "status": "ok" if all_ok else "warning",
+            "checks": checks,
+            "message": "All systems operational" if all_ok else "Some checks failed"
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e),
+            "error_type": type(e).__name__
+        }
+
 @app.post("/api/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     """
@@ -143,9 +185,28 @@ async def chat(request: ChatRequest):
             suggested_questions=response.get("suggested_questions")
         )
     
+    except ValueError as e:
+        # User-friendly error messages (API key, rate limits, etc.)
+        error_msg = str(e)
+        log_query(user_message, "error", False, error_msg)
+        print(f"API Error: {error_msg}")  # Print to console for debugging
+        raise HTTPException(status_code=500, detail=error_msg)
     except Exception as e:
-        log_query(user_message, "error", False, str(e))
-        raise HTTPException(status_code=500, detail=f"Error processing request: {str(e)}")
+        # Generic error handling with detailed logging
+        error_type = type(e).__name__
+        error_msg = str(e)
+        full_error = f"{error_type}: {error_msg}"
+        
+        # Log to console for debugging
+        print(f"Error processing request: {full_error}")
+        import traceback
+        traceback.print_exc()  # Print full traceback to console
+        
+        log_query(user_message, "error", False, full_error)
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Error processing request: {error_msg}"
+        )
 
 @app.get("/api/study-spots")
 def get_study_spots(
@@ -204,6 +265,18 @@ def get_bus(
         }
     )
     return result
+
+@app.post("/api/clear-session")
+def clear_session(session_id: str):
+    """Clear conversation history for a session (useful if session is corrupted)"""
+    try:
+        langgraph_agent.memory.clear_session(session_id)
+        return {
+            "status": "success",
+            "message": f"Session {session_id} cleared successfully"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error clearing session: {str(e)}")
 
 @app.get("/api/logs")
 def get_logs(limit: int = 50):

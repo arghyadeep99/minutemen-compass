@@ -35,11 +35,17 @@ class LangGraphAgent:
 
         # Initialize OpenAI model with system prompt
         # Using gpt-4o-mini (gpt-5-mini doesn't exist)
-        self.model = ChatOpenAI(
-            model="gpt-4o-mini",
-            temperature=0.7,
-            api_key=api_key
-        )
+        try:
+            self.model = ChatOpenAI(
+                model="gpt-4o-mini",
+                temperature=0.7,
+                api_key=api_key
+            )
+        except Exception as e:
+            raise ValueError(
+                f"Failed to initialize OpenAI client: {str(e)}. "
+                "Please check your OPENAI_API_KEY and ensure it's valid."
+            ) from e
 
         self.system_prompt = """You are the UMass Campus Agent, a helpful AI assistant for UMass Amherst students, faculty, and staff.
 
@@ -53,8 +59,16 @@ Guidelines:
 - For study spots: Consider location, noise level, group size, and current hours
 - For dining: Consider time of day, dietary restrictions, and location
 - For resources: Match the user's need (academic, mental health, financial, etc.)
-- For transportation: Provide specific bus routes and schedules when available
+- For transportation/bus queries: ALWAYS use the get_bus_schedule tool when users ask about:
+  * Bus routes (e.g., "route 31", "bus 30", "B43")
+  * Bus schedules or times
+  * When the next bus arrives
+  * Bus stops or locations
+  * PVTA bus information
+  Extract the route number from the query and use get_bus_schedule with route_number parameter
 - Always suggest campus-specific resources over generic advice
+
+IMPORTANT: When a user asks about a bus route (e.g., "route 31", "bus 30", "what is route B43"), you MUST call the get_bus_schedule tool with the route_number parameter. Do not provide generic information without checking the actual schedule.
 
 If a user asks something you can't answer with available tools, acknowledge it and suggest they contact the relevant office directly.
 
@@ -110,10 +124,25 @@ Format your responses naturally, as if talking to a friend who needs help naviga
         
         # Get bus schedule tool
         tools.append(StructuredTool.from_function(
-            func=lambda origin=None, destination=None: 
-                tool_registry.get_bus_schedule(origin, destination),
+            func=lambda route_number=None, origin=None, destination=None, stop=None: 
+                tool_registry.get_bus_schedule(route_number, origin, destination, stop),
             name="get_bus_schedule",
-            description="Get PVTA bus schedule information between campus locations",
+            description="""Get PVTA bus schedule information for UMass Amherst. 
+            
+USE THIS TOOL when users ask about:
+- Bus routes (e.g., "route 31", "bus 30", "what is route B43")
+- Bus schedules or times
+- When the next bus arrives at a stop
+- Bus stops or locations
+- PVTA bus information
+
+Parameters:
+- route_number: The bus route number (e.g., "30", "31", "B43", "35") - EXTRACT THIS FROM USER QUERY
+- origin: Starting location (optional)
+- destination: Destination location (optional)  
+- stop: Specific stop name to get next bus times (optional)
+
+IMPORTANT: If the user mentions a route number (like "31", "30", "B43"), you MUST provide the route_number parameter. The tool will download and parse the actual PDF schedule for that route.""",
         ))
         
         # Get course info tool
@@ -141,6 +170,69 @@ Format your responses naturally, as if talking to a friend who needs help naviga
         ))
         
         return tools
+
+    def _clean_conversation_history(self, messages: List[BaseMessage]) -> List[BaseMessage]:
+        """
+        Clean conversation history to ensure valid message sequence.
+        Removes orphaned ToolMessages that don't have a preceding AIMessage with tool_calls.
+        OpenAI API requires that ToolMessages must follow an AIMessage with tool_calls.
+        """
+        if not messages:
+            return []
+        
+        cleaned = []
+        
+        for i, msg in enumerate(messages):
+            # If it's a ToolMessage, check if there's a preceding AIMessage with tool_calls
+            if isinstance(msg, ToolMessage):
+                # Look backwards through cleaned messages to find preceding AIMessage
+                found_valid_predecessor = False
+                
+                for j in range(len(cleaned) - 1, -1, -1):
+                    prev_msg = cleaned[j]
+                    
+                    # Check if previous message is an AIMessage with tool_calls
+                    if isinstance(prev_msg, AIMessage):
+                        # Check if it has tool_calls
+                        tool_calls = getattr(prev_msg, 'tool_calls', None)
+                        if tool_calls and len(tool_calls) > 0:
+                            # Verify the tool_call_id matches one of the tool_calls
+                            tool_call_id = getattr(msg, 'tool_call_id', '')
+                            if tool_call_id:
+                                # Check if any tool_call has a matching id
+                                for tc in tool_calls:
+                                    tc_id = None
+                                    if isinstance(tc, dict):
+                                        tc_id = tc.get('id') or tc.get('tool_call_id')
+                                    elif hasattr(tc, 'id'):
+                                        tc_id = tc.id
+                                    elif hasattr(tc, 'tool_call_id'):
+                                        tc_id = tc.tool_call_id
+                                    
+                                    if tc_id == tool_call_id:
+                                        found_valid_predecessor = True
+                                        break
+                            
+                            # If we found an AIMessage with tool_calls, that's good enough
+                            # (even if IDs don't match, we'll include it to avoid breaking the sequence)
+                            if not found_valid_predecessor:
+                                found_valid_predecessor = True
+                            break
+                        else:
+                            # AIMessage without tool_calls - stop looking
+                            break
+                    elif isinstance(prev_msg, (HumanMessage, SystemMessage)):
+                        # Stop at human/system messages - no valid predecessor found
+                        break
+                
+                if found_valid_predecessor:
+                    cleaned.append(msg)
+                # else: skip orphaned ToolMessage
+            else:
+                # For non-ToolMessages, add them
+                cleaned.append(msg)
+        
+        return cleaned
 
     def _build_graph(self, tool_registry: Any):
         """Build the LangGraph state graph"""
@@ -233,7 +325,9 @@ Format your responses naturally, as if talking to a friend who needs help naviga
         conversation_history = []
         has_system_in_history = False
         if session_id:
-            conversation_history = self.memory.get_conversation_history(session_id, max_messages=20)
+            raw_history = self.memory.get_conversation_history(session_id, max_messages=20)
+            # Clean and validate conversation history to ensure proper message sequence
+            conversation_history = self._clean_conversation_history(raw_history)
             # Check if system message is already in history
             has_system_in_history = any(
                 isinstance(msg, SystemMessage) for msg in conversation_history
@@ -245,8 +339,40 @@ Format your responses naturally, as if talking to a friend who needs help naviga
             "messages": initial_messages
         }
         
-        # Run the graph
-        final_state = await self.graph.ainvoke(initial_state)
+        # Run the graph with error handling
+        try:
+            final_state = await self.graph.ainvoke(initial_state)
+        except Exception as e:
+            # Capture detailed error information
+            error_type = type(e).__name__
+            error_message = str(e)
+            
+            # Check for common OpenAI API errors
+            if "API key" in error_message or "authentication" in error_message.lower():
+                raise ValueError(
+                    f"OpenAI API Authentication Error: {error_message}. "
+                    "Please check your OPENAI_API_KEY in the .env file."
+                )
+            elif "rate limit" in error_message.lower() or "429" in error_message:
+                raise ValueError(
+                    f"OpenAI API Rate Limit Error: {error_message}. "
+                    "Please wait a moment and try again."
+                )
+            elif "insufficient_quota" in error_message.lower() or "quota" in error_message.lower():
+                raise ValueError(
+                    f"OpenAI API Quota Error: {error_message}. "
+                    "Your OpenAI account may have insufficient credits."
+                )
+            elif "invalid" in error_message.lower() and "model" in error_message.lower():
+                raise ValueError(
+                    f"OpenAI API Model Error: {error_message}. "
+                    "The model specified may not be available."
+                )
+            else:
+                # Re-raise with more context
+                raise Exception(
+                    f"OpenAI API Error ({error_type}): {error_message}"
+                ) from e
         
         # Extract messages
         messages = final_state["messages"]
@@ -353,6 +479,15 @@ Format your responses naturally, as if talking to a friend who needs help naviga
                 [
                     "How do I contact academic support?",
                     "What mental health resources are available?",
+                ]
+            )
+
+        if any(tc.get("name") == "get_course_info" for tc in tool_calls):
+            suggestions.extend(
+                [
+                    "What are the prerequisites for CICS 210?",
+                    "Who teaches INFO 248?",
+                    "What courses are offered in Spring 2026?",
                 ]
             )
 
