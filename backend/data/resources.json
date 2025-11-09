@@ -1,0 +1,113 @@
+[
+  {
+    "name": "Center for Counseling and Psychological Health (CCPH)",
+    "category": "mental_health",
+    "phone": "(413) 545-2337",
+    "email": "counseling@umass.edu",
+    "location": "127 Hills North",
+    "hours": "Mon-Fri 8:30am-5pm, 24/7 crisis support",
+    "description": "Mental health counseling and crisis support",
+    "tags": ["mental_health", "counseling", "crisis", "support"],
+    "website": "https://www.umass.edu/counseling"
+  },
+  {
+    "name": "Dean of Students Office",
+    "category": "general",
+    "phone": "(413) 545-2684",
+    "email": "dos@umass.edu",
+    "location": "227 Whitmore",
+    "hours": "Mon-Fri 8:30am-5pm",
+    "description": "Student support, conduct, and advocacy",
+    "tags": ["support", "advocacy", "conduct", "general"],
+    "website": "https://www.umass.edu/deanofstudents"
+  },
+  {
+    "name": "Learning Resource Center",
+    "category": "academic",
+    "phone": "(413) 545-5334",
+    "email": "lrc@umass.edu",
+    "location": "10th Floor Du Bois Library",
+    "hours": "Mon-Thu 9am-9pm, Fri 9am-5pm",
+    "description": "Academic support, tutoring, and study skills",
+    "tags": ["academic", "tutoring", "study_skills", "support"],
+    "website": "https://www.umass.edu/lrc"
+  },
+  {
+    "name": "Writing Center",
+    "category": "academic",
+    "phone": "(413) 545-0610",
+    "email": "writing@umass.edu",
+    "location": "W.E.B. Du Bois Library",
+    "hours": "Mon-Thu 10am-8pm, Fri 10am-4pm",
+    "description": "Writing assistance and feedback",
+    "tags": ["academic", "writing", "support"],
+    "website": "https://www.umass.edu/writingcenter"
+  },
+  {
+    "name": "Financial Aid Office",
+    "category": "financial",
+    "phone": "(413) 545-0801",
+    "email": "finaid@umass.edu",
+    "location": "243 Whitmore",
+    "hours": "Mon-Fri 8:30am-5pm",
+    "description": "Financial aid, scholarships, and billing",
+    "tags": ["financial", "aid", "scholarships", "billing"],
+    "website": "https://www.umass.edu/financialaid"
+  },
+  {
+    "name": "Disability Services",
+    "category": "disability",
+    "phone": "(413) 545-0892",
+    "email": "disability@umass.edu",
+    "location": "161 Whitmore",
+    "hours": "Mon-Fri 8:30am-5pm",
+    "description": "Accommodations and support for students with disabilities",
+    "tags": ["disability", "accommodations", "support"],
+    "website": "https://www.umass.edu/disability"
+  },
+  {
+    "name": "Career Services",
+    "category": "career",
+    "phone": "(413) 545-2224",
+    "email": "careers@umass.edu",
+    "location": "511 Goodell",
+    "hours": "Mon-Fri 8:30am-5pm",
+    "description": "Career counseling, internships, and job search support",
+    "tags": ["career", "internships", "jobs", "support"],
+    "website": "https://www.umass.edu/career"
+  },
+  {
+    "name": "Student Legal Services",
+    "category": "legal",
+    "phone": "(413) 545-1995",
+    "email": "sls@umass.edu",
+    "location": "917 Campus Center",
+    "hours": "Mon-Fri 9am-5pm",
+    "description": "Free legal advice for students",
+    "tags": ["legal", "support", "advice"],
+    "website": "https://www.umass.edu/studentlegalservices"
+  },
+  {
+    "name": "Center for Women & Community",
+    "category": "support",
+    "phone": "(413) 545-0883",
+    "email": "cwc@umass.edu",
+    "location": "180 Infirmary Way",
+    "hours": "Mon-Fri 9am-5pm, 24/7 hotline",
+    "description": "Support services and advocacy",
+    "tags": ["support", "advocacy", "women", "community"],
+    "website": "https://www.umass.edu/cwc"
+  },
+  {
+    "name": "UMass Police",
+    "category": "safety",
+    "phone": "(413) 545-2121",
+    "email": "police@umass.edu",
+    "location": "585 East Pleasant Street",
+    "hours": "24/7",
+    "description": "Campus police and emergency services",
+    "tags": ["safety", "emergency", "police"],
+    "website": "https://www.umass.edu/umpd"
+  }
+]
+

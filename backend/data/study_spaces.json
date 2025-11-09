@@ -1,0 +1,75 @@
+[
+  {
+    "name": "Du Bois Library 16th Floor",
+    "type": "quiet",
+    "location": "Central",
+    "group_size": "1-3",
+    "hours": "8am-12am",
+    "description": "Quiet study floor with individual carrels and great views",
+    "amenities": ["WiFi", "Power outlets", "Quiet environment"]
+  },
+  {
+    "name": "Du Bois Library Learning Commons",
+    "type": "moderate",
+    "location": "Central",
+    "group_size": "2-6",
+    "hours": "24/7",
+    "description": "Collaborative space with group study rooms",
+    "amenities": ["WiFi", "Group rooms", "Printers", "Food allowed"]
+  },
+  {
+    "name": "LGRC Study Lounge",
+    "type": "moderate",
+    "location": "LGRC",
+    "group_size": "1-4",
+    "hours": "7am-11pm",
+    "description": "Comfortable lounge area near LGRC",
+    "amenities": ["WiFi", "Comfortable seating", "Near dining"]
+  },
+  {
+    "name": "Science and Engineering Library",
+    "type": "quiet",
+    "location": "Central",
+    "group_size": "1-2",
+    "hours": "8am-10pm",
+    "description": "Quiet study space with science resources",
+    "amenities": ["WiFi", "Research materials", "Quiet zones"]
+  },
+  {
+    "name": "Campus Center Study Areas",
+    "type": "collaborative",
+    "location": "Central",
+    "group_size": "2-8",
+    "hours": "7am-12am",
+    "description": "Open collaborative spaces",
+    "amenities": ["WiFi", "Food nearby", "Group tables"]
+  },
+  {
+    "name": "W.E.B. Du Bois Library 3rd Floor",
+    "type": "quiet",
+    "location": "Central",
+    "group_size": "1-2",
+    "hours": "8am-12am",
+    "description": "Silent study area",
+    "amenities": ["WiFi", "Silent environment", "Individual desks"]
+  },
+  {
+    "name": "Integrated Learning Center (ILC)",
+    "type": "moderate",
+    "location": "Central",
+    "group_size": "1-6",
+    "hours": "7am-11pm",
+    "description": "Modern study spaces with technology",
+    "amenities": ["WiFi", "Computer labs", "Group rooms", "Whiteboards"]
+  },
+  {
+    "name": "Student Union Study Rooms",
+    "type": "collaborative",
+    "location": "Central",
+    "group_size": "4-10",
+    "hours": "8am-10pm",
+    "description": "Reservable group study rooms",
+    "amenities": ["WiFi", "Projectors", "Whiteboards", "Reservable"]
+  }
+]
+

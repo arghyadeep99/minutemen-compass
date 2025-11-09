@@ -1,0 +1,111 @@
+[
+  {
+    "name": "Worcester Commons",
+    "location": "Central",
+    "type": "Dining Hall",
+    "hours": {
+      "open": "07:00",
+      "close": "21:00"
+    },
+    "dietary_options": ["vegetarian", "vegan", "halal", "gluten-free"],
+    "description": "Main dining hall with diverse options",
+    "late_night": false
+  },
+  {
+    "name": "Berkshire Commons",
+    "location": "Central",
+    "type": "Dining Hall",
+    "hours": {
+      "open": "07:00",
+      "close": "21:00"
+    },
+    "dietary_options": ["vegetarian", "vegan", "gluten-free"],
+    "description": "Central dining hall",
+    "late_night": false
+  },
+  {
+    "name": "Hampshire Dining Commons",
+    "location": "Central",
+    "type": "Dining Hall",
+    "hours": {
+      "open": "07:00",
+      "close": "21:00"
+    },
+    "dietary_options": ["vegetarian", "vegan", "halal"],
+    "description": "Popular dining hall",
+    "late_night": false
+  },
+  {
+    "name": "Blue Wall",
+    "location": "Campus Center",
+    "type": "Food Court",
+    "hours": {
+      "open": "10:00",
+      "close": "22:00"
+    },
+    "dietary_options": ["vegetarian", "vegan", "gluten-free"],
+    "description": "Food court with multiple vendors",
+    "late_night": true
+  },
+  {
+    "name": "Peet's Coffee",
+    "location": "Campus Center",
+    "type": "Cafe",
+    "hours": {
+      "open": "07:00",
+      "close": "22:00"
+    },
+    "dietary_options": ["vegetarian", "vegan"],
+    "description": "Coffee and light snacks",
+    "late_night": true
+  },
+  {
+    "name": "Subway",
+    "location": "Campus Center",
+    "type": "Fast Food",
+    "hours": {
+      "open": "10:00",
+      "close": "23:00"
+    },
+    "dietary_options": ["vegetarian"],
+    "description": "Sandwiches and salads",
+    "late_night": true
+  },
+  {
+    "name": "Earth Foods Cafe",
+    "location": "Student Union",
+    "type": "Cafe",
+    "hours": {
+      "open": "08:00",
+      "close": "20:00"
+    },
+    "dietary_options": ["vegetarian", "vegan", "gluten-free"],
+    "description": "Vegetarian and vegan focused",
+    "late_night": false
+  },
+  {
+    "name": "Starbucks",
+    "location": "LGRC",
+    "type": "Cafe",
+    "hours": {
+      "open": "07:00",
+      "close": "21:00"
+    },
+    "dietary_options": ["vegetarian", "vegan"],
+    "description": "Coffee and pastries",
+    "late_night": false
+  },
+  {
+    "name": "Franklin Dining Commons",
+    "location": "North",
+    "type": "Dining Hall",
+    "hours": {
+      "open": "07:00",
+      "close": "21:00"
+    },
+    "dietary_options": ["vegetarian", "vegan", "halal", "gluten-free"],
+    "description": "North campus dining hall",
+    "late_night": false
+  }
+]
+
