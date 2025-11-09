@@ -1,111 +1,172 @@
 [
   {
     "name": "Worcester Commons",
-    "location": "Central",
+    "location": "Northeast Residential Area",
+    "address": "667 N Pleasant St, Amherst MA 01003",
     "type": "Dining Hall",
     "hours": {
-      "open": "07:00",
-      "close": "21:00"
+      "regular": {
+        "monday_sunday": "7:00 AM - Midnight"
+      },
+      "grab_n_go": {
+        "monday_friday": "7:00 AM - 8:00 PM"
+      },
+      "late_night": {
+        "sunday_saturday": "9:00 PM - 12:00 AM"
+      }
     },
     "dietary_options": ["vegetarian", "vegan", "halal", "gluten-free"],
-    "description": "Main dining hall with diverse options",
-    "late_night": false
-  },
-  {
-    "name": "Berkshire Commons",
-    "location": "Central",
-    "type": "Dining Hall",
-    "hours": {
-      "open": "07:00",
-      "close": "21:00"
+    "description": "Located in the Northeast Residential Area, Worcester Dining Commons is the newest and one of the most popular dining facilities on campus. Worcester offers a variety of options including Mediterranean, authentic street food, tandoor Indian kitchen, hand rolled sushi, noodle bowls, pizza, and much more!",
+    "features": [
+      "Mediterranean cuisine",
+      "Authentic street food",
+      "Tandoor Indian kitchen",
+      "Hand rolled sushi",
+      "Noodle bowls",
+      "Pizza"
+    ],
+    "late_night": true,
+    "late_night_hours": "9pm-12am Sunday-Saturday",
+    "manager": {
+      "name": "Luanne Wu",
+      "phone": "413-545-2143",
+      "email": "lwu@umass.edu"
     },
-    "dietary_options": ["vegetarian", "vegan", "gluten-free"],
-    "description": "Central dining hall",
-    "late_night": false
-  },
-  {
-    "name": "Hampshire Dining Commons",
-    "location": "Central",
-    "type": "Dining Hall",
-    "hours": {
-      "open": "07:00",
-      "close": "21:00"
-    },
-    "dietary_options": ["vegetarian", "vegan", "halal"],
-    "description": "Popular dining hall",
-    "late_night": false
-  },
-  {
-    "name": "Blue Wall",
-    "location": "Campus Center",
-    "type": "Food Court",
-    "hours": {
-      "open": "10:00",
-      "close": "22:00"
-    },
-    "dietary_options": ["vegetarian", "vegan", "gluten-free"],
-    "description": "Food court with multiple vendors",
-    "late_night": true
-  },
-  {
-    "name": "Peet's Coffee",
-    "location": "Campus Center",
-    "type": "Cafe",
-    "hours": {
-      "open": "07:00",
-      "close": "22:00"
-    },
-    "dietary_options": ["vegetarian", "vegan"],
-    "description": "Coffee and light snacks",
-    "late_night": true
-  },
-  {
-    "name": "Subway",
-    "location": "Campus Center",
-    "type": "Fast Food",
-    "hours": {
-      "open": "10:00",
-      "close": "23:00"
-    },
-    "dietary_options": ["vegetarian"],
-    "description": "Sandwiches and salads",
-    "late_night": true
-  },
-  {
-    "name": "Earth Foods Cafe",
-    "location": "Student Union",
-    "type": "Cafe",
-    "hours": {
-      "open": "08:00",
-      "close": "20:00"
-    },
-    "dietary_options": ["vegetarian", "vegan", "gluten-free"],
-    "description": "Vegetarian and vegan focused",
-    "late_night": false
-  },
-  {
-    "name": "Starbucks",
-    "location": "LGRC",
-    "type": "Cafe",
-    "hours": {
-      "open": "07:00",
-      "close": "21:00"
-    },
-    "dietary_options": ["vegetarian", "vegan"],
-    "description": "Coffee and pastries",
-    "late_night": false
+    "payment_methods": [
+      "Meal Plans",
+      "Dining Dollars",
+      "UCard Debit",
+      "Cash",
+      "Credit Cards"
+    ]
   },
   {
     "name": "Franklin Dining Commons",
-    "location": "North",
+    "location": "Central Residential Area",
+    "address": "260 Stockbridge Rd, Amherst MA 01003",
     "type": "Dining Hall",
     "hours": {
-      "open": "07:00",
-      "close": "21:00"
+      "regular": {
+        "monday_sunday": "7:00 AM - 9:00 PM"
+      },
+      "grab_n_go": {
+        "monday_friday": "10:00 AM - 4:00 PM"
+      },
+      "kosher": {
+        "monday_friday": "7:00 AM - 7:00 PM",
+        "sunday": "11:30 AM - 7:00 PM"
+      }
+    },
+    "dietary_options": ["vegetarian", "vegan", "halal", "gluten-free", "kosher"],
+    "description": "Located in the Central Residential Area, Franklin Dining Commons is famous for its vegan and vegetarian cuisine. With a fully kosher kitchen, vegetarian line, hand rolled sushi, pasta bar, stir fry station, pizza, authentic international cuisine, there is an option for everyone! At Franklin you also have the opportunity to enjoy the permaculture garden where we grow the ingredients and herbs used in our food.",
+    "features": [
+      "Vegan and vegetarian cuisine",
+      "Fully kosher kitchen",
+      "Vegetarian line",
+      "Hand rolled sushi",
+      "Pasta bar",
+      "Stir fry station",
+      "Pizza",
+      "Authentic international cuisine",
+      "Permaculture garden"
+    ],
+    "late_night": false,
+    "kosher_dining": true,
+    "manager": {
+      "name": "Amy Cuff",
+      "phone": "413-695-3304",
+      "email": "acuff@umass.edu"
+    },
+    "payment_methods": [
+      "Meal Plans",
+      "Dining Dollars",
+      "UCard Debit",
+      "Cash",
+      "Credit Cards"
+    ]
+  },
+  {
+    "name": "Hampshire Dining Commons",
+    "location": "Southwest Residential Area",
+    "address": "141 Southwest Cir, Amherst MA 01003",
+    "type": "Dining Hall",
+    "hours": {
+      "regular": {
+        "monday_sunday": "7:00 AM - 9:00 PM"
+      },
+      "grab_n_go": {
+        "monday_friday": "7:00 AM - 12:00 PM"
+      }
     },
     "dietary_options": ["vegetarian", "vegan", "halal", "gluten-free"],
-    "description": "North campus dining hall",
-    "late_night": false
+    "description": "Located in the Southwest Residential Area, Hampshire Dining Commons prides itself on healthy eating, sustainability, world flavors, and community. Hampshire offers a variety of options including a vegetarian line, gluten free options, noodle bowls, hand rolled sushi, authentic street food, grill station, and much more.",
+    "features": [
+      "Healthy eating focus",
+      "Sustainability",
+      "World flavors",
+      "Vegetarian line",
+      "Gluten free options",
+      "Noodle bowls",
+      "Hand rolled sushi",
+      "Authentic street food",
+      "Grill station"
+    ],
+    "late_night": false,
+    "manager": {
+      "name": "Selina Fournier",
+      "phone": "413-577-5160",
+      "email": "sfournier@umass.edu"
+    },
+    "payment_methods": [
+      "Meal Plans",
+      "Dining Dollars",
+      "UCard Debit",
+      "Cash",
+      "Credit Cards"
+    ]
+  },
+  {
+    "name": "Berkshire Dining Commons",
+    "location": "Southwest Residential Area",
+    "address": "121 Southwest Cir, Amherst MA 01003",
+    "type": "Dining Hall",
+    "hours": {
+      "regular": {
+        "monday_sunday": "11:00 AM - Midnight"
+      },
+      "grab_n_go": {
+        "monday_friday": "7:00 AM - 8:00 PM"
+      },
+      "late_night": {
+        "sunday_thursday": "9:00 PM - 12:00 AM",
+        "friday_saturday": "9:00 PM - 12:00 AM (Late Owl Cafe)"
+      }
+    },
+    "dietary_options": ["vegetarian", "vegan", "halal", "gluten-free"],
+    "description": "Located in the Southwest Residential Area, this award winning dining common features many display cooking areas with freshness in mind. Come enjoy hand rolled sushi, stir fry station, authentic international cuisine, fresh salad bar, customizable deli bar, pizza, and so much more!",
+    "features": [
+      "Award winning",
+      "Display cooking areas",
+      "Hand rolled sushi",
+      "Stir fry station",
+      "Authentic international cuisine",
+      "Fresh salad bar",
+      "Customizable deli bar",
+      "Pizza"
+    ],
+    "late_night": true,
+    "late_night_hours": "9pm-12am Sunday-Thursday, 9pm-12am Friday & Saturday (Late Owl Cafe @ Berkshire Dining Commons)",
+    "manager": {
+      "name": "Heather Scoble",
+      "phone": "413-545-1175",
+      "email": "hscoble@umass.edu"
+    },
+    "payment_methods": [
+      "Meal Plans",
+      "Dining Dollars",
+      "UCard Debit",
+      "Cash",
+      "Credit Cards"
+    ]
   }
 ]
-

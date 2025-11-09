@@ -15,7 +15,7 @@ from datetime import datetime
 import sqlite3
 from pathlib import Path
 
-from gemini_client import GeminiClient
+from langgraph_agent import LangGraphAgent
 from tools import ToolRegistry
 from safety_checker import SafetyChecker
 
@@ -31,7 +31,7 @@ app.add_middleware(
 )
 
 # Initialize components
-gemini_client = GeminiClient()
+langgraph_agent = LangGraphAgent()
 tool_registry = ToolRegistry()
 safety_checker = SafetyChecker()
 
@@ -86,7 +86,7 @@ def root():
 @app.post("/api/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     """
-    Main chat endpoint that processes user messages through Gemini
+    Main chat endpoint that processes user messages through LangGraph agent
     with tool support and safety checks
     """
     user_message = request.message.strip()
@@ -108,15 +108,19 @@ async def chat(request: ChatRequest):
             ]
         )
     
-    # Get tool schemas for Gemini
+    # Get tool schemas (kept for compatibility)
     tools_schema = tool_registry.get_tools_schema()
     
-    # Call Gemini with tools
+    # Call LangGraph agent with tools
     try:
-        response = await gemini_client.chat_with_tools(
+        # Use session_id from request, or generate one if not provided
+        session_id = request.session_id or f"session_{datetime.now().timestamp()}"
+        
+        response = await langgraph_agent.chat_with_tools(
             user_message=user_message,
             tools_schema=tools_schema,
-            tool_registry=tool_registry
+            tool_registry=tool_registry,
+            session_id=session_id
         )
         
         # Determine category
