@@ -6,6 +6,17 @@ A chat-based AI assistant that answers campus-specific questions for UMass Amher
 
 **Minutemen Compass** is like ChatGPT, but actually understands UMass life and does real tasks. Built for HackUMass with a focus on Ethical AI and using the Gemini API.
 
+## 💻 Demo
+
+https://user-images.githubusercontent.com/arghyadeep99/minutemen-compass/assets/screen-capture.webm
+
+<details>
+<summary>Watch Demo Video</summary>
+
+https://github.com/arghyadeep99/minutemen-compass/assets/screen-capture.webm
+
+</details>
+
 ## ✨ Features
 
 ### MVP Features
