@@ -41,7 +41,7 @@ https://github.com/arghyadeep99/minutemen-compass/assets/screen-capture.webm
 
 - **Frontend**: React + Vite + TailwindCSS
 - **Backend**: FastAPI (Python)
-- **AI**: Google Gemini API (gemini-1.5-flash)
+- **AI**: Google Gemini API (gemini-2.5-flash)
 - **Data Storage**: JSON files + SQLite for logging
 
 ## 📁 Project Structure
