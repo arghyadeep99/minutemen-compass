@@ -4,6 +4,8 @@ Create a `.env` file in the `backend/` directory with the following content:
 
 ```
 GEMINI_API_KEY=your_gemini_api_key_here
+# Optional: base URL for dining scraping (defaults to UMass Dining Locations & Menus)
+DINING_BASE_URL=https://umassdining.com/locations-menus
 ```
 
 To get your Gemini API key:
