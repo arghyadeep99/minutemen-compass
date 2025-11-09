@@ -1,0 +1,862 @@
+[
+  {
+    "hall": "Berkshire Menu",
+    "url": "https://umassdining.com/locations-menus/berkshire/menu",
+    "date_text": "Menu For Sat November 08, 2025",
+    "meals": {
+      "Lunch": {
+        "Breakfast Entrees": [
+          "French Toast Sticks",
+          "Hot Oatmeal",
+          "Mediterranean Breakfast Toast",
+          "Omelet Bar",
+          "Red Potato Home Fries",
+          "Rstd Tomato, Bean & Mushroom Breakfast",
+          "Scrambled Eggs",
+          "Sliced Kielbasa"
+        ],
+        "Breakfast Pastries": [
+          "Blueberry Blizzard Coffeecake (Pecans, Walnuts)",
+          "Mini Apple Danish"
+        ],
+        "Soups": [
+          "Roasted Chicken Noodle Soup w/Herbs",
+          "Tomato Basil Soup"
+        ],
+        "Grill Station": [
+          "Grilled Chicken Breast",
+          "Halal Burger Patty",
+          "Halal French Fries",
+          "Hand Cut Sweet Potato Fries",
+          "Kelp Burger"
+        ],
+        "International": [
+          "Jasmine Rice",
+          "Kung Pao Peanut Chicken",
+          "Salt & Pepper Pulmuone Tofu",
+          "Stir Fry Green Vegetables",
+          "Vegetable Fried Rice",
+          "Vegetable Spring Rolls"
+        ],
+        "Pasta Bar": [
+          "Baked Ziti",
+          "Basil Cream Pesto Sauce",
+          "Marinara Sauce",
+          "Spaghetti",
+          "Whole Grain Penne"
+        ],
+        "Deli Bar": [
+          "American Cheese",
+          "Deli Beef",
+          "Homemade Mid Eastern Hummus",
+          "Homemade Spicy Hummus",
+          "Provolone Cheese",
+          "Tuna Salad",
+          "Turkey Breast"
+        ],
+        "Desserts": [
+          "Zebra Brownies"
+        ],
+        "Noodle Bowl": [
+          "Tantanmen Ramen Bar"
+        ],
+        "Pizza": [
+          "Cheese Pizza",
+          "Pepperoni Pizza"
+        ],
+        "Display Station": [
+          "Pancake Bar (Peanuts, Almonds, Walnuts)"
+        ]
+      },
+      "Dinner": {
+        "Soups": [
+          "Roasted Chicken Noodle Soup w/Herbs",
+          "Tomato Basil Soup"
+        ],
+        "Entrees": [
+          "Spinach, Artichoke & Quinoa Casserole"
+        ],
+        "Starches": [
+          "Roasted Diced Sweet Potato"
+        ],
+        "Vegetables": [
+          "Carrot Tzimmes",
+          "Sautéed Kale"
+        ],
+        "Grill Station": [
+          "Grilled Chicken Thighs",
+          "Halal Burger Patty",
+          "Halal French Fries",
+          "Hand Cut Sweet Potato Fries",
+          "Kelp Burger"
+        ],
+        "International": [
+          "Chicken & Vegetable Stir Fry",
+          "Jasmine Rice",
+          "Mei Fun Noodles",
+          "Pulmuone Tofu & Vegetable Stir Fry",
+          "Stir Fry Green Vegetables",
+          "Vegetable Spring Rolls"
+        ],
+        "Pasta Bar": [
+          "Baked Ziti",
+          "Marinara Sauce",
+          "Spaghetti",
+          "Tomato Pesto Cream",
+          "Whole Grain Penne"
+        ],
+        "Salad Bar/Dressings": [
+          "Alfalfa Sprouts",
+          "Banana Peppers",
+          "Beans Black",
+          "Carrots Sticks",
+          "Celery Sticks",
+          "Chickpea Salad w/Tomatoes & Feta",
+          "Chickpeas",
+          "Chopped Walnuts",
+          "Craisins",
+          "Cucumbers",
+          "Fat Free Cottage Cheese",
+          "Grape Tomatoes",
+          "Green Olives",
+          "Green Peppers",
+          "Homemade Red Pepper Hummus",
+          "Kidney Beans",
+          "Marinated Kale, Bean & Tomato Salad",
+          "Olive Tapenade",
+          "Onions",
+          "Pita Chips",
+          "Pulmuone Tofu",
+          "Radishes",
+          "Roasted Tomato & Olive Salad",
+          "Romaine Lettuce",
+          "Sliced Eggs",
+          "Sliced Mushrooms",
+          "Spinach Leaves",
+          "Sunflower Seeds",
+          "Tuna"
+        ],
+        "Desserts": [
+          "Tiramisu Cake (Gelatin)",
+          "Vanilla Cake w/Choc Icing"
+        ],
+        "Breads": [
+          "Anadama Bread"
+        ],
+        "Noodle Bowl": [
+          "Tantanmen Ramen Bar"
+        ],
+        "Pizza": [
+          "Cheese Pizza",
+          "Pepperoni Pizza"
+        ],
+        "Sushi": [
+          "California Roll",
+          "Salmon Cream Cheese Sushi Roll w/Brown Rice",
+          "Shrimp Sushi Roll",
+          "Vegetable Sushi Roll"
+        ],
+        "Display Station": [
+          "Buffalo Wings",
+          "Carrots Sticks",
+          "Celery Sticks",
+          "Jerk Chicken Wings",
+          "Plant Based Boneless Buffalo Chic'n Wings"
+        ]
+      },
+      "Late Night": {
+        "Entrees": [
+          "Beef Tacos (Meat Only)",
+          "Buttered Corn and Red Peppers",
+          "Flour Tortilla",
+          "Latin Toppings",
+          "Mexican Rice",
+          "Pinto Beans",
+          "Plant Based Chorizo Crumbles",
+          "Taco Shells"
+        ],
+        "Pizza": [
+          "Cheese Pizza",
+          "Pepperoni Pizza",
+          "Vegetable Pizza"
+        ],
+        "Display Station": [
+          "Garlic Bread Sticks",
+          "Homemade Clam Chowder",
+          "Tomato Bisque Soup"
+        ],
+        "Nutrition Facts": [
+          "Serving Size #serving_size#",
+          "Amount Per Serving",
+          "Calories #calories# Fat Cal. #fat_cal#",
+          "% Daily Value*",
+          "Total Fat #total_fat# #total_fat_dv# %",
+          "Cholesterol #cholesterol# #cholesterol_dv# %",
+          "Sodium #sodium# #sodium_dv# %",
+          "Total Carbohydrate #carb# #carb_dv# %",
+          "Protein #protein#"
+        ],
+        "Useful Links": [
+          "Meal Plans",
+          "Locations & Menus",
+          "Sustainability",
+          "Nutrition",
+          "Food Security Initiatives",
+          "Press & Events",
+          "About",
+          "UMass Living Laboratory",
+          "Privacy Policy",
+          "Partner With Us",
+          "Late Night",
+          "Retail Dining",
+          "Food Truck",
+          "FAQ",
+          "For Parents",
+          "Additional Resources",
+          "Contact"
+        ],
+        "Contact us": [
+          "UMass Dining. University Of Massachusetts Amherst. Amherst, MA 01003",
+          "413-545-2472",
+          "www.umassdining.com"
+        ]
+      }
+    }
+  },
+  {
+    "hall": "Worcester Menu",
+    "url": "https://umassdining.com/locations-menus/worcester/menu",
+    "date_text": "Menu For Sat November 08, 2025",
+    "meals": {
+      "Lunch": {
+        "Breakfast Entrees": [
+          "Chicken Congee",
+          "Chinese Twist Cruller",
+          "GENERAL MILLS Apple Turnover",
+          "Hard Boiled Egg",
+          "Hot Oatmeal",
+          "Omelet Bar",
+          "Red Potato Home Fries",
+          "Rstd Tomato, Bean & Mushroom Breakfast",
+          "Scrambled Eggs",
+          "Sliced Kielbasa",
+          "Southwest Tofu Scramble"
+        ],
+        "Breakfast Pastries": [
+          "Blueberry Blizzard Coffeecake (Pecans, Walnuts)",
+          "Mini Apple Danish"
+        ],
+        "Soups": [
+          "Chicken Noodle Soup"
+        ],
+        "Grill Station": [
+          "Baked Herbs de Provence Chicken",
+          "Black Bean Burger",
+          "Halal Burger Patty",
+          "Halal French Fries",
+          "Hand Cut Sweet Potato Fries",
+          "Roasted Butternut Squash",
+          "Roasted Zucchini"
+        ],
+        "Salad Bar/Dressings": [
+          "Farro, Tomato, & Chickpea Salad",
+          "Pickled Winter Moon Root Vetegables"
+        ],
+        "Desserts": [
+          "Zebra Brownies"
+        ],
+        "Noodle Bowl": [
+          "Chicken Shoyu Ramen Bar (Fish, Shellfish)",
+          "Hard Boiled Egg"
+        ],
+        "Pizza": [
+          "Cheese Pizza",
+          "Pepperoni Pizza"
+        ],
+        "Street Food": [
+          "Jasmine Rice",
+          "Mei Fun Noodles",
+          "Salt & Pepper Pulmuone Tofu",
+          "Stir Fry Green Vegetables",
+          "Szechuan Pork Belly w/Cabbage & Caul"
+        ],
+        "Tandoor": [
+          "Cumin Basmati Rice",
+          "Naan",
+          "Pulmuone Tofu Tikka Masala",
+          "Vegetable Korma Rasoi",
+          "Vegetable Sambar"
+        ],
+        "Mediterranean": [
+          "Manicotti",
+          "Marinara Sauce",
+          "Meatball Sauce",
+          "Orecchiette Pasta",
+          "Whole Grain Penne"
+        ],
+        "Seasons": [
+          "BUSH's Baked Beans",
+          "Corn, Tomato & Scallion Salad",
+          "GF Penne Pasta",
+          "Grape Tomatoes",
+          "Honey Mustard Vinaigrette",
+          "Marinara Sauce",
+          "Pumpkin Seeds/Pepitas",
+          "Red & Yellow Pepper Salad",
+          "Rice Pilaf",
+          "Spring Mix",
+          "Sunflower Seeds",
+          "Tear Drop Peppers"
+        ],
+        "Latino 1 WOR": [
+          "Chilaquiles Verdes",
+          "Omelet Bar"
+        ]
+      },
+      "Dinner": {
+        "Soups": [
+          "Chicken Noodle Soup"
+        ],
+        "Grill Station": [
+          "Baked Herbs de Provence Chicken",
+          "Black Bean Burger",
+          "Halal Burger Patty",
+          "Halal French Fries",
+          "Hand Cut Sweet Potato Fries",
+          "Local Roasted Sweet Potatoes",
+          "Roasted Cauliflower & Broccoli"
+        ],
+        "Salad Bar/Dressings": [
+          "Farro, Tomato, & Chickpea Salad",
+          "Pickled Winter Moon Root Vetegables"
+        ],
+        "Desserts": [
+          "Tiramisu Cake (Gelatin)",
+          "Vanilla Cake w/Choc Icing"
+        ],
+        "Breads": [
+          "Anadama Bread"
+        ],
+        "Noodle Bowl": [
+          "Tantanmen Ramen Bar"
+        ],
+        "Pizza": [
+          "Cheese Pizza",
+          "Pepperoni Pizza"
+        ],
+        "Street Food": [
+          "Braised Pulmuone Tofu",
+          "Chicken & Vegetable Stir Fry",
+          "Jasmine Rice",
+          "Stir Fry Green Vegetables",
+          "Vegetable Lo Mein"
+        ],
+        "Tandoor": [
+          "Chickpea Salad w/Tomatoes & Feta",
+          "Garlic Parmesan Roasted Creamer Potatoes",
+          "Greek Tomato Salad",
+          "Herbed Roasted Chicken",
+          "Lemon Rice Pilaf",
+          "Marinated Artichokes",
+          "Tear Drop Peppers"
+        ],
+        "Mediterranean": [
+          "Manicotti",
+          "Marinara Sauce",
+          "Meatball Sauce",
+          "Orecchiette Pasta",
+          "Whole Grain Penne"
+        ],
+        "Seasons": [
+          "Corn, Tomato & Scallion Salad",
+          "GF Penne Pasta",
+          "Grape Tomatoes",
+          "Greek Lentils",
+          "Honey Mustard Vinaigrette",
+          "Lemon Quinoa w/Craisins & Thyme",
+          "Marinara Sauce",
+          "Moraccan Green Garbanzo Bean Salad",
+          "Pumpkin Seeds/Pepitas",
+          "Rstd Mediterranean Cauliflower",
+          "Sautéed Kale",
+          "Spring Mix",
+          "Sunflower Seeds",
+          "Tear Drop Peppers"
+        ],
+        "Latino 1 WOR": [
+          "Ancho Lime Pulled Chicken",
+          "Black Beans",
+          "Filling for Beef Tacos",
+          "Latin Toppings",
+          "Plant Based Chorizo Crumbles",
+          "Queso Sauce",
+          "Spicy Mango Salad",
+          "Tri Color Tortilla Chips",
+          "Warm Charred Corn Salsa",
+          "Yellow Rice"
+        ]
+      },
+      "Late Night": {
+        "Grill Station": [
+          "Baked Herbs de Provence Chicken",
+          "Black Bean Burger",
+          "Halal Burger Patty",
+          "Halal French Fries",
+          "Roasted Zucchini"
+        ],
+        "Pizza": [
+          "Cheese Pizza",
+          "Pepperoni Pizza",
+          "Tortellini w/Red Pepper Pesto & Artichoke"
+        ],
+        "Latino 1 WOR": [
+          "Chicken Noodle Soup",
+          "Grilled Cheese Sandwich",
+          "Tomato Basil Soup",
+          "VIOLIFE Grilled Cheese Sandwich"
+        ],
+        "Nutrition Facts": [
+          "Serving Size #serving_size#",
+          "Amount Per Serving",
+          "Calories #calories# Fat Cal. #fat_cal#",
+          "% Daily Value*",
+          "Total Fat #total_fat# #total_fat_dv# %",
+          "Cholesterol #cholesterol# #cholesterol_dv# %",
+          "Sodium #sodium# #sodium_dv# %",
+          "Total Carbohydrate #carb# #carb_dv# %",
+          "Protein #protein#"
+        ],
+        "Useful Links": [
+          "Meal Plans",
+          "Locations & Menus",
+          "Sustainability",
+          "Nutrition",
+          "Food Security Initiatives",
+          "Press & Events",
+          "About",
+          "UMass Living Laboratory",
+          "Privacy Policy",
+          "Partner With Us",
+          "Late Night",
+          "Retail Dining",
+          "Food Truck",
+          "FAQ",
+          "For Parents",
+          "Additional Resources",
+          "Contact"
+        ],
+        "Contact us": [
+          "UMass Dining. University Of Massachusetts Amherst. Amherst, MA 01003",
+          "413-545-2472",
+          "www.umassdining.com"
+        ]
+      }
+    }
+  },
+  {
+    "hall": "Franklin Menu",
+    "url": "https://umassdining.com/locations-menus/franklin/menu",
+    "date_text": "Menu For Sat November 08, 2025",
+    "meals": {
+      "Lunch": {
+        "Breakfast Entrees": [
+          "Chicken Congee",
+          "Chinese Twist Cruller",
+          "French Toast Sticks",
+          "Hard Boiled Egg",
+          "Hot Oatmeal",
+          "Omelet Bar",
+          "Red Potato Home Fries",
+          "Rstd Tomato, Bean & Mushroom Breakfast",
+          "Scrambled Eggs",
+          "Sliced Kielbasa",
+          "Tofu Scramble"
+        ],
+        "Breakfast Pastries": [
+          "Blueberry Blizzard Coffeecake (Pecans, Walnuts)",
+          "Mini Apple Danish"
+        ],
+        "GF Hot Breakfast": [
+          "Gluten Free Waffles",
+          "Red Potato Home Fries",
+          "Scrambled Eggs"
+        ],
+        "Soups": [
+          "Roasted Chicken Noodle Soup w/Herbs",
+          "Tomato Basil Soup"
+        ],
+        "Grill Station": [
+          "Black Bean Burger",
+          "French Fries",
+          "Grilled Cheese Sandwich",
+          "Grilled Chicken Breast",
+          "SPARE Beef Burger",
+          "Sweet Potato Fries"
+        ],
+        "Vegetarian Line": [
+          "Bombay Lentils & Spinach",
+          "Cauliflower & Potato Curry",
+          "Channa Masala",
+          "Chickpea Chaat Salad",
+          "Chickpea Edamame Salad",
+          "Turmeric Basmati Rice"
+        ],
+        "Pasta Bar": [
+          "Baked Ziti",
+          "Cavatappi Pasta",
+          "Garlic Parmesan Cream Sauce",
+          "Marinara Sauce",
+          "Spaghetti"
+        ],
+        "Deli Bar": [
+          "American Cheese",
+          "Deli Beef",
+          "Deli Ham",
+          "Egg Salad",
+          "Homemade Spicy Hummus",
+          "Provolone Cheese",
+          "Tuna Salad",
+          "Turkey Breast"
+        ],
+        "Desserts": [
+          "Zebra Brownies"
+        ],
+        "Lunch/Dinner Miscellaneous": [
+          "Plant-Based Condiments Bar w/Almonds"
+        ],
+        "Pizza": [
+          "Cheese Pizza",
+          "Pepperoni Pizza"
+        ],
+        "Gluten Free": [
+          "Mediterranean Chicken Bowl"
+        ],
+        "Express": [
+          "Brown Rice",
+          "Dim Sum",
+          "Egg Drop Soup",
+          "Jasmine Rice",
+          "Stir Fried Vegetables",
+          "Vegetable Fried Rice",
+          "Vegetable Spring Rolls"
+        ]
+      },
+      "Dinner": {
+        "Soups": [
+          "Roasted Chicken Noodle Soup w/Herbs",
+          "Tomato Basil Soup"
+        ],
+        "Entrees": [
+          "French Onion Meatloaf",
+          "Portuguese Chourico, Clams, & Atlantic Sea Farm Kelp"
+        ],
+        "Starches": [
+          "Local Seasoned Mashed Potatoes",
+          "Spanish Chickpeas w/Spinach"
+        ],
+        "Vegetables": [
+          "Braised Collards in Tomato Onion Gravy",
+          "Carrot Tzimmes"
+        ],
+        "Grill Station": [
+          "Black Bean Burger",
+          "French Fries",
+          "Grilled Cheese Sandwich",
+          "Grilled Chicken Breast",
+          "SPARE Beef Burger",
+          "Sweet Potato Fries"
+        ],
+        "Vegetarian Line": [
+          "Baked Buffalo Pulmuone Tofu",
+          "Brown Rice",
+          "Chickpea Chaat Salad",
+          "Chickpea Edamame Salad",
+          "Plant Based Mediterranean Chic'n Penne",
+          "Spinach w/Mushrooms",
+          "Wilted Swiss Chard"
+        ],
+        "Pasta Bar": [
+          "Baked Ziti",
+          "Cavatappi Pasta",
+          "Garlic Parmesan Cream Sauce",
+          "Marinara Sauce",
+          "Spaghetti"
+        ],
+        "Desserts": [
+          "Tiramisu Cake (Gelatin)",
+          "Vanilla Cake w/Choc Icing"
+        ],
+        "Breads": [
+          "Anadama Bread"
+        ],
+        "Lunch/Dinner Miscellaneous": [
+          "Plant-Based Condiments Bar w/Almonds"
+        ],
+        "Pizza": [
+          "Cheese Pizza",
+          "Pepperoni Pizza"
+        ],
+        "Gluten Free": [
+          "Black Beans",
+          "Homemade Guacamole",
+          "Spare Beef Taco Filling",
+          "Taco Salad Bar Toppings"
+        ],
+        "Express": [
+          "Brown Rice",
+          "Chicken & Vegetable Stir Fry",
+          "Jasmine Rice",
+          "Pulmuone Tofu w/Jade Vegetables",
+          "Stir Fried Vegetables",
+          "Vegetable Lo Mein",
+          "Vegetable Spring Rolls"
+        ],
+        "Nutrition Facts": [
+          "Serving Size #serving_size#",
+          "Amount Per Serving",
+          "Calories #calories# Fat Cal. #fat_cal#",
+          "% Daily Value*",
+          "Total Fat #total_fat# #total_fat_dv# %",
+          "Cholesterol #cholesterol# #cholesterol_dv# %",
+          "Sodium #sodium# #sodium_dv# %",
+          "Total Carbohydrate #carb# #carb_dv# %",
+          "Protein #protein#"
+        ],
+        "Useful Links": [
+          "Meal Plans",
+          "Locations & Menus",
+          "Sustainability",
+          "Nutrition",
+          "Food Security Initiatives",
+          "Press & Events",
+          "About",
+          "UMass Living Laboratory",
+          "Privacy Policy",
+          "Partner With Us",
+          "Late Night",
+          "Retail Dining",
+          "Food Truck",
+          "FAQ",
+          "For Parents",
+          "Additional Resources",
+          "Contact"
+        ],
+        "Contact us": [
+          "UMass Dining. University Of Massachusetts Amherst. Amherst, MA 01003",
+          "413-545-2472",
+          "www.umassdining.com"
+        ]
+      }
+    }
+  },
+  {
+    "hall": "Hampshire Menu",
+    "url": "https://umassdining.com/locations-menus/hampshire/menu",
+    "date_text": "Menu For Sat November 08, 2025",
+    "meals": {
+      "Lunch": {
+        "Miscellaneous": [
+          "Butternut Ginger Soup"
+        ],
+        "Breakfast Entrees": [
+          "French Toast Sticks",
+          "Hard Boiled Egg",
+          "Hot Oatmeal",
+          "Omelet Bar",
+          "Rstd Tomato, Bean & Mushroom Breakfast",
+          "Scrambled Eggs",
+          "Sliced Kielbasa"
+        ],
+        "Breakfast Pastries": [
+          "Mini Apple Danish",
+          "Seeded Blueberry Coffeecake"
+        ],
+        "Soups": [
+          "Chicken Noodle Soup",
+          "Skillet Hash Browns",
+          "Tomato Basil Soup"
+        ],
+        "Grill Station": [
+          "French Fries",
+          "Grilled Chicken Breast",
+          "Grilled Chicken Thighs",
+          "Kelp Burger",
+          "Roasted Maple Carrots",
+          "Roasted Zucchini",
+          "SPARE Beef Burger",
+          "Sweet Potato Fries",
+          "Teriyaki Chicken & Ham Sandwich"
+        ],
+        "Vegetarian Line": [
+          "Bombay Lentils & Spinach",
+          "Cauliflower & Potato Curry",
+          "Channa Masala",
+          "Naan",
+          "Turmeric Basmati Rice"
+        ],
+        "Pasta Bar": [
+          "Basil Cream Pesto Sauce",
+          "Cannellini Bean Salad w/Pepper, Rstd Garlic",
+          "Marinara Sauce",
+          "Mesclun Greens w/Almonds and Blueberry-Basil Vinaigrette",
+          "Rstd Eggplant w/Sundried Tomato Nut Pesto",
+          "Spaghetti",
+          "Vegetable Lasagna",
+          "Whole Grain Penne"
+        ],
+        "Desserts": [
+          "Zebra Brownies"
+        ],
+        "Noodle Bowl": [
+          "Chicken Congee",
+          "Homemade Kim Chi (Fish)"
+        ],
+        "Pizza": [
+          "Cheese Pizza",
+          "Pepperoni Pizza",
+          "Vegetable Pizza"
+        ],
+        "Sushi": [
+          "California Roll",
+          "Spicy Tuna Roll",
+          "Teriyaki Pulmuone Tofu Roll",
+          "Vegetable Sushi Roll"
+        ],
+        "Gluten Free": [
+          "Gluten Free Turkey Chili"
+        ],
+        "Latino FRK HMP": [
+          "Ancho Chile Pork Torta",
+          "Black Beans",
+          "Fried Plantain",
+          "Latin Toppings",
+          "Yellow Rice"
+        ],
+        "Street Food": [
+          "Dim Sum",
+          "Pork Fried Rice",
+          "Stir Fried Vegetables"
+        ]
+      },
+      "Dinner": {
+        "Soups": [
+          "Roasted Chicken Noodle Soup w/Herbs",
+          "Tomato Basil Soup"
+        ],
+        "Entrees": [
+          "Local Seasoned Mashed Potatoes",
+          "SPARE French Onion Meatloaf"
+        ],
+        "Starches": [
+          "Roasted Carrots, Cauliflower & Shallots",
+          "Spanish Chickpeas w/Spinach"
+        ],
+        "Vegetables": [
+          "Brown Sugar Koginut Squash",
+          "Carrot Tzimmes"
+        ],
+        "Grill Station": [
+          "French Fries",
+          "Grilled Chicken Breast",
+          "Grilled Chicken Thighs",
+          "Kelp Burger",
+          "Nacho Bar",
+          "Roasted Maple Carrots",
+          "Roasted Zucchini",
+          "SPARE Beef Burger",
+          "Sweet Potato Fries"
+        ],
+        "Vegetarian Line": [
+          "Asian Vegetable Succotach",
+          "Miso Ginger Pulmuone Tofu and Broccoli",
+          "Plant Based Chic'n & Vegetable Stir Fry",
+          "Sautéed Kale"
+        ],
+        "Pasta Bar": [
+          "Basil Cream Pesto Sauce",
+          "Cannellini Bean Salad w/Pepper, Rstd Garlic",
+          "Marinara Sauce",
+          "Mesclun Greens w/Almonds and Blueberry-Basil Vinaigrette",
+          "Penne w/Mushrooms, Tomatoes & Spinach",
+          "Rstd Eggplant w/Sundried Tomato Nut Pesto",
+          "Spaghetti",
+          "Vegetable Lasagna",
+          "Whole Grain Penne"
+        ],
+        "Desserts": [
+          "Tiramisu Cake (Gelatin)",
+          "Vanilla Cake w/Choc Icing"
+        ],
+        "Breads": [
+          "Anadama Bread"
+        ],
+        "Noodle Bowl": [
+          "Rice Soup (Pork or Pulmuone Tofu) w/Nasoya Wrapper"
+        ],
+        "Pizza": [
+          "Cheese Pizza",
+          "Pepperoni Pizza",
+          "Vegetable Pizza"
+        ],
+        "Sushi": [
+          "California Roll",
+          "Spicy Tuna Roll",
+          "Teriyaki Pulmuone Tofu Roll",
+          "Vegetable Sushi Roll"
+        ],
+        "Gluten Free": [
+          "Salmon Hash"
+        ],
+        "Latino FRK HMP": [
+          "Ancho Chile Pork Torta",
+          "Black Beans",
+          "Fried Plantain",
+          "Latin Toppings",
+          "Yellow Rice"
+        ],
+        "Street Food": [
+          "Chicken & Vegetable Stir Fry",
+          "Dan Dan Noodles (Peanuts)",
+          "Salt & Pepper Pulmuone Tofu",
+          "Stir Fried Vegetables",
+          "Vegetable Spring Rolls"
+        ],
+        "Nutrition Facts": [
+          "Serving Size #serving_size#",
+          "Amount Per Serving",
+          "Calories #calories# Fat Cal. #fat_cal#",
+          "% Daily Value*",
+          "Total Fat #total_fat# #total_fat_dv# %",
+          "Cholesterol #cholesterol# #cholesterol_dv# %",
+          "Sodium #sodium# #sodium_dv# %",
+          "Total Carbohydrate #carb# #carb_dv# %",
+          "Protein #protein#"
+        ],
+        "Useful Links": [
+          "Meal Plans",
+          "Locations & Menus",
+          "Sustainability",
+          "Nutrition",
+          "Food Security Initiatives",
+          "Press & Events",
+          "About",
+          "UMass Living Laboratory",
+          "Privacy Policy",
+          "Partner With Us",
+          "Late Night",
+          "Retail Dining",
+          "Food Truck",
+          "FAQ",
+          "For Parents",
+          "Additional Resources",
+          "Contact"
+        ],
+        "Contact us": [
+          "UMass Dining. University Of Massachusetts Amherst. Amherst, MA 01003",
+          "413-545-2472",
+          "www.umassdining.com"
+        ]
+      }
+    }
+  }
+]

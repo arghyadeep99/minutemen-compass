@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# UMass Campus Agent - Startup Script
+# Minutemen Compass - Startup Script
 # Starts both backend and frontend servers
 
-echo "🚀 Starting UMass Campus Agent..."
+echo "🚀 Starting Minutemen Compass..."
 
 # Check if .env exists
 if [ ! -f "backend/.env" ]; then

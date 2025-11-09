@@ -1,5 +1,5 @@
 """
-Safety Checker for UMass Campus Agent
+Safety Checker for Minutemen Compass
 Implements ethical guardrails to detect and handle unsafe requests
 """
 from typing import Dict, List
